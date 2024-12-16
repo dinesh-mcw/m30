@@ -1,0 +1,10 @@
+#!/bin/sh
+
+REL_API_DIR=/media/bmw/rajrup/Cobra_Embedded/cobra/lib/python3.10/site-packages/cobra_lidar_api-6.3.0-py3.10.egg/cobra_lidar_api
+DEV_API_DIR=/media/bmw/rajrup/Cobra_Embedded/cobra_lidar_api/cobra_lidar_api
+
+if [ -d ${DEV_API_DIR} ] ; then
+    /usr/bin/gunicorn wsgi:app --chdir ${DEV_API_DIR} -m 007 -w 3 -t 120 --bind 0.0.0.0:80
+else
+    /usr/bin/gunicorn wsgi:app --chdir ${REL_API_DIR} -m 007 -w 3 -t 120 --bind 0.0.0.0:80
+fi

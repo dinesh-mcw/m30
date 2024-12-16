@@ -1,0 +1,63 @@
+From 7b9811671df30168873e84b1a8f141dfb956f515 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Tue, 3 Jan 2023 15:12:26 -0700
+Subject: [PATCH 1/5] Updating pinctrl for TEC GPIO.
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 24 +++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index 4104eedcdae0..293b5ed3fb4a 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -556,7 +556,7 @@ &esai0 {
+ 	assigned-clock-parents = <&aud_pll_div0_lpcg 0>;
+ 	assigned-clock-rates = <0>, <786432000>, <49152000>, <12288000>, <49152000>;
+ 	fsl,txm-rxs;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &sai0 {
+@@ -986,7 +986,7 @@ &fec2 {
+ 	nvmem-cells = <&fec_mac1>;
+ 	nvmem-cell-names = "mac-address";
+ 	rx-internal-delay-ps = <2000>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &flexspi0 {
+@@ -1381,9 +1381,27 @@ &iomuxc {
+ 
+ 	pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+-			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
++//			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
+ 			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
+ 			IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x0600004c
++			IMX8QM_ENET1_MDC_LSIO_GPIO4_IO18              0x00000041
++			IMX8QM_ENET1_REFCLK_125M_25M_LSIO_GPIO4_IO16  0x00000041
++			IMX8QM_ENET1_RGMII_RXC_LSIO_GPIO6_IO16        0x00000041
++			IMX8QM_ENET1_RGMII_RXD0_LSIO_GPIO6_IO18       0x00000041
++			IMX8QM_ENET1_RGMII_RXD1_LSIO_GPIO6_IO19       0x00000041
++			IMX8QM_ENET1_RGMII_RXD2_LSIO_GPIO6_IO20       0x00000041
++			IMX8QM_ENET1_RGMII_RXD3_LSIO_GPIO6_IO21       0x00000041
++			IMX8QM_ENET1_RGMII_RX_CTL_LSIO_GPIO6_IO17     0x00000041
++			IMX8QM_ENET1_RGMII_TXC_LSIO_GPIO6_IO10        0x00000041
++			IMX8QM_ENET1_RGMII_TXD0_LSIO_GPIO6_IO12       0x00000041
++			IMX8QM_ENET1_RGMII_TXD1_LSIO_GPIO6_IO13       0x00000041
++			IMX8QM_ENET1_RGMII_TXD2_LSIO_GPIO6_IO14       0x00000041
++			IMX8QM_ENET1_RGMII_TXD3_LSIO_GPIO6_IO15       0x00000041
++			IMX8QM_ENET1_RGMII_TX_CTL_LSIO_GPIO6_IO11     0x00000041
++
++			IMX8QM_SPI0_SDO_LSIO_GPIO3_IO03               0x00000041
++			IMX8QM_MCLK_IN0_LSIO_GPIO3_IO00               0x00000041
++			IMX8QM_MCLK_OUT0_LSIO_GPIO3_IO01              0x00000041
+ 		>;
+ 	};
+ 
+-- 
+2.25.1
+

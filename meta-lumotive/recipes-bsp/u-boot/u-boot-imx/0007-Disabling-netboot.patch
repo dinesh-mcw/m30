@@ -1,0 +1,51 @@
+From 989fe553ed710b09bbbea7e50075e9183911ab63 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Wed, 15 Feb 2023 09:45:29 -0700
+Subject: [PATCH 07/10] Disabling netboot.
+
+---
+ include/configs/imx8qm_mek.h | 28 +---------------------------
+ 1 file changed, 1 insertion(+), 27 deletions(-)
+
+diff --git a/include/configs/imx8qm_mek.h b/include/configs/imx8qm_mek.h
+index e7c5d8ab51..9821f9fd93 100644
+--- a/include/configs/imx8qm_mek.h
++++ b/include/configs/imx8qm_mek.h
+@@ -226,33 +226,7 @@
+ 		"root=/dev/nfs " \
+ 		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp " \
+ 		"cpufreq.default_governor=SCHEDUTIL\0" \
+-	"netboot=echo Booting from net ...; " \
+-		"run netargs;  " \
+-		"if test ${ip_dyn} = yes; then " \
+-			"setenv get_cmd dhcp; " \
+-		"else " \
+-			"setenv get_cmd tftp; " \
+-		"fi; " \
+-		"if ${get_cmd} ${hdp_addr} ${hdp_file}; then; hdp load ${hdp_addr}; fi;" \
+-		"if test ${sec_boot} = yes; then " \
+-			"${get_cmd} ${cntr_addr} ${cntr_file}; " \
+-			"if run auth_os; then " \
+-				"run boot_os; " \
+-			"else " \
+-				"echo ERR: failed to authenticate; " \
+-			"fi; " \
+-		"else " \
+-			"${get_cmd} ${loadaddr} ${image}; " \
+-			"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
+-				"if ${get_cmd} ${fdt_addr} ${fdt_file}; then " \
+-					"run boot_os; " \
+-				"else " \
+-					"echo WARN: Cannot load the DT; " \
+-				"fi; " \
+-			"else " \
+-				"booti; " \
+-			"fi;" \
+-		"fi;\0" \
++	"netboot=echo Netboot disabled.;\0" \
+ 	"bootcmd2=mmc dev ${mmcdev}; if mmc rescan; then "\
+ 		"if run loadbootscript; then " \
+ 			"run bootscript; " \
+-- 
+2.25.1
+

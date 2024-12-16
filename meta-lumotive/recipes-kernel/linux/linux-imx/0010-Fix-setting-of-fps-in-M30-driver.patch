@@ -1,0 +1,80 @@
+From 8ccfc882e1a8b7631c8d77117e1c6ab937c608cb Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Sun, 14 May 2023 14:44:41 -0700
+Subject: [PATCH] Fix setting of fps in M30 driver
+
+---
+ drivers/media/i2c/m30.c | 39 ++++++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/media/i2c/m30.c b/drivers/media/i2c/m30.c
+index b3bebfc95787..046983042e21 100644
+--- a/drivers/media/i2c/m30.c
++++ b/drivers/media/i2c/m30.c
+@@ -171,19 +171,29 @@ static int m30_s_power(struct v4l2_subdev *sd, int on)
+ 	return ret;
+ }
+ 
+-static int m30_try_frame_interval(struct m30_dev *sensor,
+-				     struct v4l2_fract *fi,
+-				     u32 width, u32 height)
++static int m30_find_nearest_frame_interval(struct m30_dev *sensor,
++					   struct v4l2_fract *fi)
+ {
+-	const struct m30_mode_info *mode;
++	u32 fps = fi->denominator / fi->numerator;
++	int min_diff = 10000;
++	int best_fps = -1;
++	int i;
+ 
+ 	printk("%s\n", __func__);
+-	mode = m30_find_mode(sensor, width, height, false);
+ 
+-	if (mode) {
++	for (i = 0; i < M30_NUM_FRAME_RATES; i++) {
++		u32 fps_i = m30_frame_rates[i];
++		int diff = fps >= fps_i ? fps - fps_i : fps_i - fps;
++		if (diff < min_diff) {
++			min_diff = diff;
++			best_fps = i;
++		}
++	}
++
++	if (best_fps >= 0) {
+ 		fi->numerator = 1;
+-		fi->denominator = m30_frame_rates[mode->fps];
+-		return mode->fps;
++		fi->denominator = m30_frame_rates[best_fps];
++		return best_fps;
+ 	}
+ 	return -EINVAL;
+ }
+@@ -371,23 +381,14 @@ static int m30_s_frame_interval(struct v4l2_subdev *sd,
+ 
+ 	mode = sensor->current_mode;
+ 
+-	frame_rate = m30_try_frame_interval(sensor, &fi->interval,
+-					       mode->width, mode->height);
++	frame_rate = m30_find_nearest_frame_interval(sensor, &fi->interval);
+ 	if (frame_rate < 0) {
+ 		/* Always return a valid frame interval value */
+ 		fi->interval = sensor->frame_interval;
+ 		goto out;
+ 	}
+ 
+-	mode = m30_find_mode(sensor, mode->width,
+-				mode->height, true);
+-	if (!mode) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+-	if (mode != sensor->current_mode ||
+-	    frame_rate != sensor->current_fr) {
++	if (frame_rate != sensor->current_fr) {
+ 		sensor->current_fr = frame_rate;
+ 		sensor->frame_interval = fi->interval;
+ 		sensor->current_mode = mode;
+-- 
+2.25.1
+

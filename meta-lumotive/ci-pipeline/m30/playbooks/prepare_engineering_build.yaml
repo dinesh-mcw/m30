@@ -1,0 +1,166 @@
+---
+- name: Prepare the Build Environment for M30 Engineering Build Image
+  hosts: build_hosts
+  vars:
+    repo_url: "ssh://git@bitbucket.org/lumotive/meta-lumotive.git"
+    manifest_file: "manifests/imx-5.15.52-cobra.xml"
+    nxp_manifest_url: "https://raw.githubusercontent.com/nxp-imx/imx-manifest/imx-linux-kirkstone/imx-5.15.52-2.1.0.xml"
+    meta_lumotive_ref: "{{ lookup('env', 'meta_lumotive') }}"
+    cobra_raw2depth_ref: "{{ lookup('env', 'cobra_raw2depth') }}"
+    cobra_system_control_ref: "{{ lookup('env', 'cobra_system_control') }}"
+    cobra_lidar_api_ref: "{{ lookup('env', 'cobra_lidar_api') }}"
+    key_dir: "{{ build_dir }}/sources/meta-lumotive/recipes-core/images/m30-core-swu"
+    swupdate_dir: "{{ build_dir }}/sources/meta-lumotive/recipes-support/swupdate/swupdate"
+    home_dir: "{{ lookup('env','HOME') }}"
+  tasks:
+    - name: Delete the build directory if it exists
+      ansible.builtin.file:
+        path: "{{ build_dir }}"
+        state: absent
+    
+    - name: Create working directory if it does not exists
+      ansible.builtin.file:
+        path: "{{ build_dir }}"
+        state: directory
+
+    - name: Delete the output directory if it exists
+      ansible.builtin.file:
+        path: "{{ build_dir }}/output"
+        state: absent
+
+    - name: Start ssh-agent
+      shell: |
+        eval $(ssh-agent -s)
+        ssh-add "{{ home_dir }}"/.ssh/pipeline_runner
+      register: ssh_agent
+
+    - name: Validate Git references and create JSON config
+      command: python3 validate_refs_to_json.py "{{ meta_lumotive_ref }}" "{{ cobra_raw2depth_ref }}" "{{ cobra_system_control_ref }}" "{{ cobra_lidar_api_ref }}" "{{ cobra_lidar_api_ref }}" "{{ build_dir }}"
+      args:
+        chdir: "../scripts/"
+
+    - name: Extract meta-lumotive reference type from validated_refs.json
+      shell: jq -r '.meta_lumotive.type' validated_refs.json
+      args:
+        chdir: "{{ build_dir }}"
+      register: meta_lumotive_ref_type
+
+    - name: Extract meta-lumotive reference value from validated_refs.json
+      shell: jq -r '.meta_lumotive.value' validated_refs.json
+      args:
+        chdir: "{{ build_dir }}"
+      register: meta_lumotive_ref_value
+
+    - name: Initialize meta-lumotive repo with branch reference
+      command: 
+        cmd: repo init -u {{ repo_url }} -b "{{ meta_lumotive_ref_value.stdout }}" -m {{ manifest_file }}
+        chdir: "{{ build_dir }}"
+      when: meta_lumotive_ref_type.stdout == 'branch'
+
+    - name: Initialize meta-lumotive repo with tag reference
+      command: 
+        cmd: repo init -u {{ repo_url }} -b refs/tags/"{{ meta_lumotive_ref_value.stdout }}"
+        chdir: "{{ build_dir }}"
+      when: meta_lumotive_ref_type.stdout == 'tag'
+
+    - name: Initialize meta-lumotive repo with commit reference (first step)
+      command: 
+        cmd: repo init -u {{ repo_url }} -b master -m {{ manifest_file }}
+        chdir: "{{ build_dir }}"
+      when: meta_lumotive_ref_type.stdout == 'commit'
+
+    - name: Create .repo/local_manifests directory
+      ansible.builtin.file:
+        path: "{{ build_dir }}/.repo/local_manifests"
+        state: directory
+
+    - name: Install NXP manifest
+      ansible.builtin.get_url:
+        url: "{{ nxp_manifest_url }}"
+        dest: "{{ build_dir }}/.repo/local_manifests/imx-5.15.52-2.1.0.xml"
+
+    - name: Sync all repos
+      command:
+        cmd: "repo sync"
+        chdir: "{{ build_dir }}"
+    
+    - name: Checkout to specific commit in meta-lumotive repo after sync if reference is commit
+      command:
+        cmd: git checkout "{{ meta_lumotive_ref_value.stdout }}"
+        chdir: "{{ build_dir }}/sources/meta-lumotive/"
+      when: meta_lumotive_ref_type.stdout == 'commit'
+
+    - name: Update Yocto recipes based on JSON config
+      command: python3 update_yocto_recipes.py "{{ build_dir }}"
+      args:
+        chdir: "../scripts/"
+
+    - name: Enable Git LFS in the meta-lumotive repository
+      command:
+        cmd: "git lfs install"
+        chdir: "{{ build_dir }}/sources/meta-lumotive"
+
+    - name: Pull Git LFS objects
+      command:
+        cmd: "git lfs pull"
+        chdir: "{{ build_dir }}/sources/meta-lumotive"
+
+    - name: Source the Yocto environment and append BB_FETCH_RETRIES = "10" to the local.conf
+      shell: |
+        source sources/poky/oe-init-build-env build
+        echo "BB_FETCH_RETRIES = \"10\"" >> conf/local.conf
+      args:
+        executable: /bin/bash
+        chdir: "{{ build_dir }}"
+
+    - name: Check for SSH keys and Passphrase existence in the ./ssh directory
+      ansible.builtin.stat:
+        path: "{{ item.path }}"
+      register: key_stats
+      loop:
+        - { path: "~/.ssh/swupdate.priv.pem", name: "SSH Private key" }
+        - { path: "~/.ssh/swupdate.priv.pem.pass", name: "SSH Private Key Passphrase" }
+        - { path: "~/.ssh/swupdate.pub.pem", name: "SSH Public key" }
+
+    - name: Fail if any SSH key or passphrase does not exist
+      ansible.builtin.fail:
+        msg: "{{ item.item.name }} does not exist."
+      when: not item.stat.exists
+      loop: "{{ key_stats.results }}"
+
+    - name: Move SSH private key to the correct location
+      ansible.builtin.copy:
+        src: "~/.ssh/swupdate.priv.pem"
+        dest: "{{ key_dir }}/swupdate.priv.pem"
+        mode: '0600'
+
+    - name: Move SSH private key passphrase to the correct location
+      ansible.builtin.copy:
+        src: "~/.ssh/swupdate.priv.pem.pass"
+        dest: "{{ key_dir }}/swupdate.priv.pem.pass"
+        mode: '0600'
+
+    - name: Move SSH public key to the correct location
+      ansible.builtin.copy:
+        src: "~/.ssh/swupdate.pub.pem"
+        dest: "{{ swupdate_dir }}/swupdate.pub.pem"
+
+    - name: Check if the downloads cache exists in the home directory
+      ansible.builtin.stat:
+        path: "{{ home_dir }}/downloads"
+      register: downloads_cache
+    
+    - name: Create the downloads directory in the build directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ build_dir }}/downloads"
+        state: directory
+      when: not downloads_cache.stat.exists
+
+    - name: Symlink the downloads cache to the downloads directory in the build directory
+      ansible.builtin.file:
+        src: "{{ home_dir }}/downloads"
+        dest: "{{ build_dir }}/downloads"
+        state: link
+      when: downloads_cache.stat.exists
+
+

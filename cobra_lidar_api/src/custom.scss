@@ -1,0 +1,81 @@
+// Custom overrides
+
+$lumo-red: #EE0000;
+$lumo-blue: #0078D0;
+$lumo-grey: #2E2E2E;
+$lumo-green: #00A651;
+$lumo-yellow: #FFB114;
+
+$theme-colors: (
+  "primary": $lumo-blue,
+  "secondary": $lumo-grey,
+  "success": $lumo-green,
+  "danger": $lumo-red,
+  "warning": $lumo-yellow
+);
+
+// Import bootstrap defaults
+@import "~bootstrap/scss/bootstrap.scss";
+
+.hidden {
+    display: none;
+}
+
+//.btn:not(.btn-warning):not(.btn-outline-*) {
+//    color: white;
+//}
+
+.btn-lg {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* System status classes */
+.sys-status {
+    background-color: $lumo-grey;
+    border: 2px solid black;
+    color: white;
+    pointer-events: none;
+}
+
+.sys-status.configure {
+    background-color: $lumo-grey;
+    color: white;
+}
+
+.sys-status.energized {
+    background-color: $lumo-green;
+}
+
+.sys-status.scanning {
+    background-color: $lumo-yellow;
+    color: black;
+}
+
+.sys-status.scanning.active {
+    /*The below are for blinking*/
+    border-color: $lumo-red;
+    color: $lumo-red;
+}
+
+.sys-status.error {
+    background-color: $lumo-red;
+}
+
+.navbar {
+    background: white;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+:export {
+    lumoRed: $lumo-red;
+    lumoBlue: $lumo-blue;
+    lumoGreen: $lumo-green;
+    lumoGrey: $lumo-grey;
+    lumoYellow: $lumo-yellow;
+}

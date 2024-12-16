@@ -1,0 +1,22 @@
+From d2039635988b3cecd2c1ec4de374eeba66da4eb2 Mon Sep 17 00:00:00 2001
+From: Caleb Osterman <caleb.osterman@lumotive.com>
+Date: Mon, 22 Jan 2024 14:17:44 -0800
+Subject: [PATCH] M30-278: add 'quiet' to kernel params
+
+---
+ include/configs/imx8qm_mek.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/imx8qm_mek.h b/include/configs/imx8qm_mek.h
+index f418b5559d..d8e048b977 100644
+--- a/include/configs/imx8qm_mek.h
++++ b/include/configs/imx8qm_mek.h
+@@ -185,7 +185,7 @@
+ 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
+ 	"mmcautodetect=yes\0" \
+ 	"mmcargs=setenv bootargs console=${console},${baudrate} earlycon root=${mmcroot} " \
+-		"cpufreq.default_governor=SCHEDUTIL\0" \
++		"cpufreq.default_governor=SCHEDUTIL quiet audit=0\0" \
+ 	"loadbootscript=ext4load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+ 		"source\0" \

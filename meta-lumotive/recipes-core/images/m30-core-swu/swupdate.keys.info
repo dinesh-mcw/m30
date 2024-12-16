@@ -1,0 +1,6 @@
+To sign code, the following are required:
+swupdate.priv.pem -- Must be copied here from external source for a swupdate image to be built
+swupdate.priv.pem.pass -- Lives here (in Git), used to decrypt the above
+
+The two files should never be stored together. Both are required to successfully sign code. 
+Storing them separately requires that two stores be compromised in order to code sign.

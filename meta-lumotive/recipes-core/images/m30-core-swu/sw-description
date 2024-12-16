@@ -1,0 +1,32 @@
+software =
+{
+    version = "0.1.0";
+
+    tbird = {
+        hardware-compatibility: [ "1.0" ];
+        images: (
+            {
+                filename = "m30-core-image-imx8qmmek.ext4.gz";
+                sha256 = "$swupdate_get_sha256(m30-core-image-imx8qmmek.ext4.gz)";
+                device = "/dev/mmcblk0p2";
+                type = "raw";
+                compressed = "zlib";
+                encrypted = false;
+            }
+        );
+        bootenv: (
+            {
+                name = "BOOT_ORDER";
+                value = "MAIN RESCUE";
+            },
+            {
+                name = "BOOT_MAIN_LEFT";
+                value = "5";
+            },
+            {
+                name = "BOOT_RESCUE_LEFT";
+                value = "3";
+            }
+        );
+    }
+}

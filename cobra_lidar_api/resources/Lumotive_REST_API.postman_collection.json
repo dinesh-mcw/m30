@@ -1,0 +1,2040 @@
+{
+        "info": {
+                "_postman_id": "0efb92f7-98d5-469b-8b51-d04091e485a8",
+                "name": "Lumotive_REST_API",
+                "description": "REST API for Lumotive M30 lidar system",
+                "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+                "_exporter_id": "19251025"
+        },
+        "item": [
+                {
+                        "name": "/system_version",
+                        "item": [
+                                {
+                                        "name": "/system_version",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/system_version",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "system_version"
+                                                        ]
+                                                },
+                                                "description": "Gets the version information of the API, system hardware, and software."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/system_version",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/system_version",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "system_version"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "gunicorn"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 05 May 2022 06:56:32 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Connection",
+                                                                        "value": "close"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "444"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"system_version\": {\n        \"fpga_git_sha\": \"d0b56503\",\n        \"manifest_sha\": \"57992d8798d64b2c06595887c8e66f661bd0b4ce\",\n        \"os_build_sha\": \"57992d8798d64b2c06595887c8e66f661bd0b4ce\",\n        \"os_build_version\": \"R6.2.0\",\n        \"os_build_number\": \"419\",\n        \"cust_layer_sha\": \"Not applicable/available\",\n        \"firmware_sha\": \"AUTOINC+03d57b5a7a\",\n        \"compute_platform\": \"nxp\",\n        \"compute_hostname\": \"imx8qmmek\",\n        \"sensor_pcb_rev\": 2,\n        \"sensor_part_number\": \"0001179\",\n        \"calibration_version\": \"not found\",\n        \"api_version\": \"4.2.0\"\n    }\n}"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Access versioning information for the API, Sensor Head and Compute hardware platforms, and software."
+                },
+                {
+                        "name": "/sensor_id",
+                        "item": [
+                                {
+                                        "name": "/sensor_id",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/sensor_id",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "sensor_id"
+                                                        ]
+                                                },
+                                                "description": "Gets the sensor serial number."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/sensor_id",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/sensor_id",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "sensor_id"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Mon, 19 Jun 2023 18:38:13 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "27"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\"sensor_id\": \"ABK000128\"}"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Accesses the serial number of the sensor head."
+                },
+                {
+                        "name": "/update",
+                        "item": [
+                                {
+                                        "name": "/update",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/update",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "update"
+                                                        ]
+                                                },
+                                                "description": "Switches the compute module into \"Update Mode\" to perform software updates. The update must be finalized in the browser. Please see the user manual for additional details."
+                                        },
+                                        "response": []
+                                }
+                        ],
+                        "description": "Puts system in \"Update Mode\" to apply software and firmware updates."
+                },
+                {
+                        "name": "/state",
+                        "item": [
+                                {
+                                        "name": "/state",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/state",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "state"
+                                                        ]
+                                                },
+                                                "description": "Retrieves the current state of the system. Possible return values are `READY`, `ENERGIZED`, and `SCANNING`."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/state",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/state",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "state"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Mon, 19 Jun 2023 18:39:03 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "23"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"state\": \"ENERGIZED\"\n}"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Returns the operating state of the sensor head."
+                },
+                {
+                        "name": "/start_scan",
+                        "item": [
+                                {
+                                        "name": "/start_scan",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [],
+                                                "body": {
+                                                        "mode": "raw",
+                                                        "raw": "",
+                                                        "options": {
+                                                                "raw": {
+                                                                        "language": "json"
+                                                                }
+                                                        }
+                                                },
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/start_scan",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "start_scan"
+                                                        ]
+                                                },
+                                                "description": "Starts the sensor head, including scanning the laser, detecting returns, and streaming point cloud data. This method will only be successful when the system is in the `ENERGIZED` state."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/start_scan",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/start_scan",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "start_scan"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "17"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 17 Feb 2022 01:34:02 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\"\n"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Controls sensor head scanning. Starts sensor head scanning with currently applied settings."
+                },
+                {
+                        "name": "/stop_scan",
+                        "item": [
+                                {
+                                        "name": "/stop_scan",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/stop_scan",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "stop_scan"
+                                                        ]
+                                                },
+                                                "description": "Stops the sensor head, including stopping laser scanning. This method will only be successful when the system is in the `ENERGIZED` or `SCANNING` states."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/stop_scan",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/stop_scan",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "stop_scan"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "17"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 15 Feb 2022 21:43:22 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/stop_scan fail",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/stop_scan",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "stop_scan"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "FAILED",
+                                                        "code": 555,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "17"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 15 Feb 2022 21:43:22 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"FAILED\""
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Stops sensor head scanning."
+                },
+                {
+                        "name": "/scan_parameters",
+                        "item": [
+                                {
+                                        "name": "/scan_parameters/opts",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/scan_parameters/opts",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "scan_parameters",
+                                                                "opts"
+                                                        ]
+                                                },
+                                                "description": "Gets the available scan configuration fields and their value bounds or options."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/scan_parameters/opts",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters/opts",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters",
+                                                                                "opts"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 04 Apr 2024 20:41:35 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "683"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                    "body": "{\n    \"angle_range\": {\n        \"angle_min\": -45,\n        \"angle_max\": 45,\n        \"step_min\": 0.3,\n        \"step_max\": 10\n    },\n    \"fps_multiple\": {\n        \"low\": 1,\n        \"high\": 31\n    },\n    \"laser_power_percent\": {\n        \"low\": 1,\n        \"high\": 100\n    },\n    \"inte_time_us\": {\n        \"low\": 1,\n        \"high\": 20\n    },\n    \"max_range_m\": {\n        \"options\": [\n            25.2,\n            32.4\n        ]\n    },\n    \"binning\": {\n        \"options\": [\n            1,\n            2,\n            4\n        ]\n    },\n    \"frame_rate_hz\": {\n        \"low\": 300,\n        \"high\": 960\n    },\n    \"interleave\": {\n        \"options\": [\n            true,\n            false\n        ]\n    },\n    \"snr_threshold\": {\n        \"low\": 0,\n        \"high\": 511.8\n    },\n    \"nn_level\": {\n        \"options\": [\n            0,\n            1,\n            2,\n            3,\n            4,\n            5\n        ]\n    },\n    \"hdr_threshold\": {\n        \"low\": 0,\n        \"high\": 4095\n    },\n    \"hdr_laser_power_percent\": {\n        \"low\": 1,\n        \"high\": 100\n    },\n    \"hdr_inte_time_us\": {\n        \"low\": 1,\n        \"high\": 20\n    },\n    \"user_tag\": {\n        \"low\": 0,\n        \"high\": 4095\n    },\n    \"dsp_mode\": {\n        \"options\": [\n            0,\n            1\n        ]\n    }\n}"
+                                                }
+                                        ]
+                                },
+                                {
+                                        "name": "/scan_parameters",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "scan_parameters"
+                                                        ]
+                                                },
+                                                "description": "Gets the current scan configuration."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 04 Apr 2024 21:25:32 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "350"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"angle_range\": [\n        [\n            -45,\n            45,\n            1\n        ]\n    ],\n    \"fps_multiple\": [\n        1\n    ],\n    \"laser_power_percent\": [\n        100\n    ],\n    \"inte_time_us\": [\n        15\n    ],\n    \"frame_rate_hz\": [\n        960\n    ],\n    \"max_range_m\": [\n        25.2\n    ],\n    \"user_tag\": [\n        1\n    ],\n    \"binning\": [\n        2\n    ],\n    \"nn_level\": [\n        2\n    ],\n    \"snr_threshold\": [\n        1.5\n    ],\n    \"interleave\": false,\n    \"dsp_mode\": 0,\n    \"hdr_threshold\": 4095,\n    \"hdr_laser_power_percent\": [\n        25\n    ],\n    \"hdr_inte_time_us\": [\n        1\n    ]\n}"
+                                                }
+                                        ]
+                                },
+                                {
+                                        "name": "/scan_parameters",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [
+                                                        {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json",
+                                                                "type": "text"
+                                                        }
+                                                ],
+                                                "body": {
+                                                        "mode": "raw",
+                                                    "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n}\n",
+                                                        "options": {
+                                                                "raw": {
+                                                                        "language": "json"
+                                                                }
+                                                        }
+                                                },
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "scan_parameters"
+                                                        ]
+                                                },
+                                                "description": "Sets the scan configuration for the sensor head. All fields must be defined when applying new scan settings.\n\nThe \\\\txtcode{user_tag} field can be used for determining when the new scan parameters have been applied by inspection of the value in the network stream. If values are not provided, they are randomized within the bounds of the value for each Virtualized Sensor.\n\nThe \\\\txtcode{laser_power_percent} and \\\\txtcode{inte_time_us} fields will be marshalled into an integer with a \\\\texttt{floor} operation. Therefore both 50.4 and 50.8 will result in an applied \\\\txtcode{laser_power_percent}=50 and 10.4 and 10.9 will result in an applied \\\\txtcode{inte_time_us}=10.\n\n\\\\txtcode{frame_rate_hz} is floored to the nearest multiple of 10. Therefore a setting of 555 and 554.5 will both result in an applied \\\\txtcode{frame_rate_hz}=550."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                    "raw": " {\n        \"inte_time_us\": [10],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [50],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 01 Dec 2023 01:38:46 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "143"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"_schema\": [\n        \"The post to the scan_parameters does not contain all the required keys. Missing data for required field.missing {'frame_rate_hz'}\"\n    ]\n}"
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                    "raw": " {\n        \"inte_time_us\": [10],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_index\": [50],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 01 Dec 2023 01:39:04 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "41"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"laser_power_index\": [\n        \"Unknown field.\"\n    ]\n}"
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_index\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": 100,\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 01 Dec 2023 01:41:04 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "39"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"inte_time_index\": [\n        \"Unknown field.\"\n    ]\n}"
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": 100,\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 01 Dec 2023 01:41:14 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                    "raw": " {\n        \"inte_time_us\": [0.5],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [0.5],\n        \"frame_rate_hz\": [990],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 06 Feb 2024 22:28:04 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "284"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"laser_power_percent\": {\n        \"0\": [\n            \"Must be greater than or equal to 1 and less than or equal to 100.\"\n        ]\n    },\n    \"inte_time_us\": {\n        \"0\": [\n            \"Must be greater than or equal to 1 and less than or equal to 20.\"\n        ]\n    },\n    \"frame_rate_hz\": {\n        \"0\": [\n            \"Must be greater than or equal to 300 and less than or equal to 960.\"\n        ]\n    }\n}"
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 06 Feb 2024 22:29:52 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [10],\n        \"binning\": [2],\n        \"angle_range\": [\n            [-45, 45, 1]\n        ],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [50],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 06 Feb 2024 22:31:08 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [10],\n        \"binning\": [2],\n        \"angle_range\": [\n            [-1, 1, 1],\n            [-2, 2, 1],\n            [-3, 3, 1]\n        ],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [50],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n    }\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 06 Feb 2024 22:31:28 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 1,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 06 Feb 2024 22:31:47 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                    "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 29 Mar 2024 17:39:52 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 29 Mar 2024 17:42:21 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "55"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"hdr_threshold\": [\n        \"Missing data for required field.\"\n    ]\n}"
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 1000,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 29 Mar 2024 17:42:52 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 1]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 1000,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [16]\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNKNOWN",
+                                                        "code": 555,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 29 Mar 2024 17:43:01 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "125"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"FAILED: HDR integration time must be less than the integration time setting but inte_time_us = 15 and hdr_inte_time_us = 16\""
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 0.01]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 04 Apr 2024 21:24:47 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "92"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"_schema\": [\n        \"Angle step size for triplet [-45.0, 45.0, 0.0] is less than the minimum 0.3\"\n    ]\n}"
+                                                },
+                                                {
+                                                        "name": "/scan_parameters",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [
+                                                                        {
+                                                                                "key": "Content-Type",
+                                                                                "value": "application/json",
+                                                                                "type": "text"
+                                                                        }
+                                                                ],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": " {\n        \"inte_time_us\": [15],\n        \"binning\": [2],\n        \"angle_range\": [[-45, 45, 11.01]],\n        \"snr_threshold\": [1.5],\n        \"nn_level\": [2],\n        \"fps_multiple\": [1],\n        \"user_tag\": [1],\n        \"max_range_m\": [25.2],\n        \"laser_power_percent\": [100],\n        \"frame_rate_hz\": [960],\n        \"interleave\": false,\n        \"dsp_mode\": 0,\n        \"hdr_threshold\": 4095,\n        \"hdr_laser_power_percent\": [25],\n        \"hdr_inte_time_us\": [1]\n}\n",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/scan_parameters",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "scan_parameters"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "UNPROCESSABLE ENTITY",
+                                                        "code": 422,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.1.1 Python/3.10.4"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 04 Apr 2024 21:24:59 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "97"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"_schema\": [\n        \"Angle step size for triplet [-45.0, 45.0, 11.0] is greater than the maximum 10.0\"\n    ]\n}"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Configuration of custom scan patterns through a JSON structure. Field limits and definitions can be found in the document \"lumotive-programmable-lidar-primer.pdf\"."
+                },
+                {
+                        "name": "/persistent_settings",
+                        "item": [
+                                {
+                                        "name": "persistent_settings",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/persistent_settings",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "persistent_settings"
+                                                        ]
+                                                }
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "persistent_settings",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/persistent_settings",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "persistent_settings"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "gunicorn"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Wed, 27 Mar 2024 19:13:12 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Connection",
+                                                                        "value": "close"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "272"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"frontend_options\": \"-s none\",\n    \"ptp4l_options\": \"-4 -P -H -i eth0 -s --logging_level=5 --tx_timestamp_timeout=50 --max_frequency=250000000 --tsproc_mode=raw_weight --step_threshold=0.05\",\n    \"ntp_server\": \"10.20.30.39 iburst\",\n    \"ipaddr\": \"10.20.30.40\",\n    \"netmask_cidr\": \"24\"\n}"
+                                                }
+                                        ]
+                                },
+                                {
+                                        "name": "persistent_settings",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [],
+                                                "body": {
+                                                        "mode": "raw",
+                                                        "raw": "{\n    \"frontend_options\": \"-s none\",\n    \"ptp4l_options\": \"-4 -P -H -i eth0 -s --logging_level=5 --tx_timestamp_timeout=50 --max_frequency=250000000 --tsproc_mode=raw_weight --step_threshold=0.05\",\n    \"ntp_server\": \"10.20.30.39 iburst\"\n}",
+                                                        "options": {
+                                                                "raw": {
+                                                                        "language": "json"
+                                                                }
+                                                        }
+                                                },
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/persistent_settings",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "persistent_settings"
+                                                        ]
+                                                }
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "persistent_settings",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [],
+                                                                "body": {
+                                                                        "mode": "raw",
+                                                                        "raw": "{\n    \"frontend_options\": \"-s none\",\n    \"ptp4l_options\": \"-4 -P -H -i eth0 -s --logging_level=5 --tx_timestamp_timeout=50 --max_frequency=250000000 --tsproc_mode=raw_weight --step_threshold=0.05\",\n    \"ntp_server\": \"10.20.30.39 iburst\",\n    \"ipaddr\": \"10.20.30.40\",\n    \"netmask_cidr\": \"24\",\n    \"gateway\": \"10.20.30.39\"\n}",
+                                                                        "options": {
+                                                                                "raw": {
+                                                                                        "language": "json"
+                                                                                }
+                                                                        }
+                                                                },
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/persistent_settings",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "persistent_settings"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "gunicorn"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Wed, 27 Mar 2024 23:38:01 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Connection",
+                                                                        "value": "close"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"SUCCESS\""
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Gets and sets settings that persist across reboots of the system. These settings can be retrieved using a GET request; the result is a JSON structure containing all of the available persistent settings and their values. The persistent settings can be set individually or together by sending a POST request with the body containing a JSON structure containing one or more persistent settings and their corresponding values."
+                },
+                {
+                        "name": "/restart",
+                        "item": [
+                                {
+                                        "name": "/restart",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/restart",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "restart"
+                                                        ]
+                                                }
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/restart",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/restart",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "restart"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "10"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 18 Feb 2022 00:52:35 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"Success\""
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Restarts the sensor to return to the default `ENERGIZED` state."
+                },
+                {
+                        "name": "/disable",
+                        "item": [
+                                {
+                                        "name": "/disable",
+                                        "request": {
+                                                "method": "POST",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/disable",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "disable"
+                                                        ]
+                                                }
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/disable",
+                                                        "originalRequest": {
+                                                                "method": "POST",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/disable",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "disable"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "43"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Fri, 18 Feb 2022 00:52:41 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "\"Disabled. System is ready to power down.\""
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Stops scanning and disables power to the sensor head."
+                },
+                {
+                        "name": "/mapping",
+                        "item": [
+                                {
+                                        "name": "/mapping",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/mapping",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "mapping"
+                                                        ]
+                                                },
+                                                "description": "Downloads a zip file of all the sensor head angular mapping tables in CSV format."
+                                        },
+                                        "response": []
+                                }
+                        ],
+                        "description": "Returns an unencrypted zipfile containing CSV files of per-pixel angular mapping constants. This mapping table can be used to calculate (X,Y,Z) coordinates from the network stream.\n\nIn normal operation, these tables do not need to be downloaded: the sensor-head-specific tables are sent over the network and automatically used by the ROS driver."
+                },
+                {
+                        "name": "/logs",
+                        "item": [
+                                {
+                                        "name": "/logs",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/logs",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "logs"
+                                                        ]
+                                                },
+                                                "description": "Returns an encrypted zipfile containing M20 system logs and diagnostic data."
+                                        },
+                                        "response": []
+                                }
+                        ],
+                        "description": "Downloads system logs for debugging by Lumotive."
+                },
+                {
+                        "name": "/messages",
+                        "item": [
+                                {
+                                        "name": "/messages",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/messages",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "messages"
+                                                        ]
+                                                },
+                                                "description": "Gets an array of status messages."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/messages",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/messages",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "messages"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "166"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 17 Feb 2022 23:27:06 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "[\n    \"System Bootup Complete\"\n]"
+                                                }
+                                        ]
+                                },
+                                {
+                                        "name": "/messages/update",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/messages/update",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "messages",
+                                                                "update"
+                                                        ]
+                                                },
+                                                "description": "Gets the status of a sensor head update."
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "/messages/update",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/messages/update",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "messages",
+                                                                                "update"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "html",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "text/html"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "30"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                },
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "Werkzeug/2.0.1 Python/3.7.8"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Thu, 17 Feb 2022 23:27:16 GMT"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "System Bootup Complete"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Endpoints to retrieve messages from the API."
+                },
+                {
+                        "name": "/time_sync_status",
+                        "item": [
+                                {
+                                        "name": "time_sync_status",
+                                        "request": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": {
+                                                        "raw": "{{BASE_URL}}/time_sync_status",
+                                                        "host": [
+                                                                "{{BASE_URL}}"
+                                                        ],
+                                                        "path": [
+                                                                "time_sync_status"
+                                                        ]
+                                                }
+                                        },
+                                        "response": [
+                                                {
+                                                        "name": "time_sync_status",
+                                                        "originalRequest": {
+                                                                "method": "GET",
+                                                                "header": [],
+                                                                "url": {
+                                                                        "raw": "{{BASE_URL}}/time_sync_status",
+                                                                        "host": [
+                                                                                "{{BASE_URL}}"
+                                                                        ],
+                                                                        "path": [
+                                                                                "time_sync_status"
+                                                                        ]
+                                                                }
+                                                        },
+                                                        "status": "OK",
+                                                        "code": 200,
+                                                        "_postman_previewlanguage": "json",
+                                                        "header": [
+                                                                {
+                                                                        "key": "Server",
+                                                                        "value": "gunicorn"
+                                                                },
+                                                                {
+                                                                        "key": "Date",
+                                                                        "value": "Tue, 05 Mar 2024 22:01:28 GMT"
+                                                                },
+                                                                {
+                                                                        "key": "Connection",
+                                                                        "value": "close"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Type",
+                                                                        "value": "application/json"
+                                                                },
+                                                                {
+                                                                        "key": "Content-Length",
+                                                                        "value": "74"
+                                                                },
+                                                                {
+                                                                        "key": "Access-Control-Allow-Origin",
+                                                                        "value": "*"
+                                                                }
+                                                        ],
+                                                        "cookie": [],
+                                                        "body": "{\n    \"master_offset\": \"0\",\n    \"gmPresent\": \"false\",\n    \"system_clock_synced\": \"no\"\n}"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "description": "Endpoint that provides useful status information about time synchronization"
+                }
+        ],
+        "event": [
+                {
+                        "listen": "prerequest",
+                        "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                        ""
+                                ]
+                        }
+                },
+                {
+                        "listen": "test",
+                        "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                        ""
+                                ]
+                        }
+                }
+        ],
+        "variable": [
+                {
+                        "key": "PUBKEY",
+                        "value": "CHANGEME"
+                },
+                {
+                        "key": "HOST",
+                        "value": "localhost"
+                },
+                {
+                        "key": "BASE_URL",
+                        "value": "10.20.30.40"
+                }
+        ]
+}

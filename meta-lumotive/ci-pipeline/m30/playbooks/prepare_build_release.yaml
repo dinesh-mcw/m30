@@ -1,0 +1,134 @@
+---
+- name: Prepare the Build Environment for M30 Image
+  hosts: build_hosts
+  vars:
+    repo_url: "ssh://git@bitbucket.org/lumotive/meta-lumotive.git"
+    manifest_file: "manifests/imx-5.15.52-cobra.xml"
+    nxp_manifest_url: "https://raw.githubusercontent.com/nxp-imx/imx-manifest/imx-linux-kirkstone/imx-5.15.52-2.1.0.xml"
+    bitbucket_branch: "{{ lookup('env','BITBUCKET_BRANCH') }}"
+    key_dir: "{{ build_dir }}/sources/meta-lumotive/recipes-core/images/m30-core-swu"
+    swupdate_dir: "{{ build_dir }}/sources/meta-lumotive/recipes-support/swupdate/swupdate"
+    home_dir: "{{ lookup('env','HOME') }}"
+  tasks:
+    - name: Delete the build directory if it exists
+      ansible.builtin.file:
+        path: "{{ build_dir }}"
+        state: absent
+    
+    - name: Create working directory
+      ansible.builtin.file:
+        path: "{{ build_dir }}"
+        state: directory
+
+    - name: Start ssh-agent
+      shell: |
+        eval $(ssh-agent -s)
+        ssh-add "{{ home_dir }}"/.ssh/pipeline_runner
+      register: ssh_agent
+
+    - name: Set variable for repo init to BITBUCKET_TAG with refs/tags format
+      set_fact:
+        repo_branch_or_tag: "refs/tags/{{ lookup('env','BITBUCKET_TAG') }}"
+      when: lookup('env','BITBUCKET_TAG') | default('') | length > 0
+
+    - name: Set variable for repo init to BITBUCKET_BRANCH if BITBUCKET_TAG is not defined
+      set_fact:
+        repo_branch_or_tag: "{{ bitbucket_branch }}"
+      when: lookup('env','BITBUCKET_TAG') | default('') | length == 0
+
+    # This is an optional step when this Build Runs on a different repository to pull changes from the meta-lumotive repository master branch
+    - name: If BITBUCKET_REPO_SLUG is not equal to "meta-lumotive", set repo_branch_or_tag to master
+      set_fact:
+        repo_branch_or_tag: "master"
+      when: lookup('env','BITBUCKET_REPO_SLUG') != "meta-lumotive"
+
+    - name: Initialize meta-lumotive manifest with determined branch or tag
+      command:
+        cmd: "repo init -u {{ repo_url }} -b {{ repo_branch_or_tag }} -m {{ manifest_file }}"
+        chdir: "{{ build_dir }}"
+
+    - name: Create .repo/local_manifests directory
+      ansible.builtin.file:
+        path: "{{ build_dir }}/.repo/local_manifests"
+        state: directory
+
+    - name: Install NXP manifest
+      ansible.builtin.get_url:
+        url: "{{ nxp_manifest_url }}"
+        dest: "{{ build_dir }}/.repo/local_manifests/imx-5.15.52-2.1.0.xml"
+
+    - name: Sync all repos
+      command:
+        cmd: "repo sync"
+        chdir: "{{ build_dir }}"
+
+    - name: Enable Git LFS in the meta-lumotive repository
+      command:
+        cmd: "git lfs install"
+        chdir: "{{ build_dir }}/sources/meta-lumotive"
+
+    - name: Pull Git LFS objects
+      command:
+        cmd: "git lfs pull"
+        chdir: "{{ build_dir }}/sources/meta-lumotive"
+
+    - name: Create and checkout to LATEST_TAG if BITBUCKET_TAG is not defined
+      shell: |
+        cd {{ build_dir }}/sources/meta-lumotive
+        git fetch --tags
+        git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
+        echo "Checking out to the latest Release tag: $(git describe --tags `git rev-list --tags --max-count=1`) on meta-lumotive repository."
+        export LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+      when: lookup('env','BITBUCKET_TAG') | default('') | length == 0
+        
+    - name: Check for SSH keys and Passphrase existence in the ./ssh directory
+      ansible.builtin.stat:
+        path: "{{ item.path }}"
+      register: key_stats
+      loop:
+        - { path: "~/.ssh/swupdate.priv.pem", name: "SSH Private key" }
+        - { path: "~/.ssh/swupdate.priv.pem.pass", name: "SSH Private Key Passphrase" }
+        - { path: "~/.ssh/swupdate.pub.pem", name: "SSH Public key" }
+
+    - name: Fail if any SSH key or passphrase does not exist
+      ansible.builtin.fail:
+        msg: "{{ item.item.name }} does not exist."
+      when: not item.stat.exists
+      loop: "{{ key_stats.results }}"
+
+    - name: Move SSH private key to the correct location
+      ansible.builtin.copy:
+        src: "~/.ssh/swupdate.priv.pem"
+        dest: "{{ key_dir }}/swupdate.priv.pem"
+        mode: '0600'
+
+    - name: Move SSH private key passphrase to the correct location
+      ansible.builtin.copy:
+        src: "~/.ssh/swupdate.priv.pem.pass"
+        dest: "{{ key_dir }}/swupdate.priv.pem.pass"
+        mode: '0600'
+
+    - name: Move SSH public key to the correct location
+      ansible.builtin.copy:
+        src: "~/.ssh/swupdate.pub.pem"
+        dest: "{{ swupdate_dir }}/swupdate.pub.pem"
+
+    - name: Check if the downloads cache exists in the home directory
+      ansible.builtin.stat:
+        path: "{{ home_dir }}/downloads"
+      register: downloads_cache
+    
+    - name: Create the downloads directory in the build directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ build_dir }}/downloads"
+        state: directory
+      when: not downloads_cache.stat.exists
+
+    - name: Symlink the downloads cache to the downloads directory in the build directory
+      ansible.builtin.file:
+        src: "{{ home_dir }}/downloads"
+        dest: "{{ build_dir }}/downloads"
+        state: link
+      when: downloads_cache.stat.exists
+
+

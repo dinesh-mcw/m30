@@ -1,0 +1,8 @@
+[files]
+extend-exclude = [
+    "recipes-kernel/*",
+    "recipes-bsp/*",
+]
+
+[default.extend-words]
+passin = "passin"

@@ -1,0 +1,5 @@
+[build_hosts]
+localhost ansible_connection=local
+
+[build_hosts:vars]
+build_dir=/home/lumoadmin/bitbucket_pipeline_builds/m30_build

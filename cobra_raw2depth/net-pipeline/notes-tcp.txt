@@ -1,0 +1,7 @@
+Make sure TCP send buffer is large enough (frontend will exit if not). E.g.:
+sudo sysctl -w net.core.wmem_max=181632000
+
+Useful for keeping an eye on socket state (if we start to abuse the TCP stack...):
+
+watch -n 1 "ss -o -e -i -m state all '( dport = 12566 or sport = 12566 )'"
+ss -o -e -i -m state all '( dport = 12566 or sport = 12566 )'

@@ -1,0 +1,97 @@
+From 7aaba9468750b08809a878d60d9603a956cfce8d Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Tue, 3 Jan 2023 17:26:54 -0700
+Subject: [PATCH 4/5] Disabling unused I2C.
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index 8a11fae6eb6e..c7b31bde4f58 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -434,7 +434,7 @@ &cm41_i2c {
+ 	clock-frequency = <100000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_cm41_i2c>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	pca6416: gpio@20 {
+ 		compatible = "ti,tca6416";
+@@ -627,7 +627,7 @@ &i2c1_lvds0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lvds0_lpi2c1>;
+ 	clock-frequency = <100000>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	lvds-to-hdmi-bridge@4c {
+ 		compatible = "ite,it6263";
+@@ -669,7 +669,7 @@ &i2c0_mipi0 {
+         pinctrl-names = "default";
+         pinctrl-0 = <&pinctrl_mipi0_lpi2c0>;
+ 	clock-frequency = <100000>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	adv_bridge0: adv7535@3d {
+ 		#address-cells = <1>;
+@@ -716,7 +716,7 @@ &i2c0_mipi1 {
+         pinctrl-names = "default";
+         pinctrl-0 = <&pinctrl_mipi1_lpi2c0>;
+ 	clock-frequency = <100000>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	adv_bridge1: adv7535@3d {
+ 		#address-cells = <1>;
+@@ -838,7 +838,7 @@ &i2c1_lvds1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lvds1_lpi2c1>;
+ 	clock-frequency = <100000>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	lvds-to-hdmi-bridge@4c {
+ 		compatible = "ite,it6263";
+@@ -1106,7 +1106,7 @@ &i2c0 {
+ 	clock-frequency = <100000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2c0>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	isl29023@44 {
+ 		pinctrl-names = "default";
+@@ -1189,7 +1189,7 @@ &i2c1 {
+ 	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+ 	scl-gpios = <&lsio_gpio0 14 GPIO_ACTIVE_HIGH>;
+ 	sda-gpios = <&lsio_gpio0 15 GPIO_ACTIVE_HIGH>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	wm8960: wm8960@1a {
+ 		compatible = "wlf,wm8960";
+@@ -1329,7 +1329,7 @@ &i2c_mipi_csi0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2c_mipi_csi0>;
+ 	clock-frequency = <100000>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	max9286_mipi@6a {
+ 		compatible = "maxim,max9286_mipi";
+@@ -1358,7 +1358,7 @@ &i2c_mipi_csi1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2c_mipi_csi1>;
+ 	clock-frequency = <100000>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	max9286_mipi@6a {
+ 		compatible = "maxim,max9286_mipi";
+-- 
+2.25.1
+

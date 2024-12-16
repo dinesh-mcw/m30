@@ -1,0 +1,89 @@
+From 50dbbb009c80ee73996ac2379fe13d4e746c8438 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Tue, 3 Jan 2023 16:03:33 -0700
+Subject: [PATCH 3/5] Enabling both ADCs, muxing inputs, and adding SCU clock
+ resources in to clock and scu drivers.
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 25 +++++++++++++++++---
+ drivers/clk/imx/clk-imx8qxp-lpcg.h           |  1 +
+ drivers/firmware/imx/scu-pd.c                |  1 +
+ 3 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index 293b5ed3fb4a..8a11fae6eb6e 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -421,6 +421,13 @@ &adc0 {
+ 	status = "okay";
+ };
+ 
++&adc1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc1>;
++	vref-supply = <&reg_vref_1v8>;
++	status = "okay";
++};
++
+ &cm41_i2c {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
+@@ -1382,8 +1389,8 @@ &iomuxc {
+ 	pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+ //			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
+-			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
+-			IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x0600004c
++//			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
++//			IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x0600004c
+ 			IMX8QM_ENET1_MDC_LSIO_GPIO4_IO18              0x00000041
+ 			IMX8QM_ENET1_REFCLK_125M_25M_LSIO_GPIO4_IO16  0x00000041
+ 			IMX8QM_ENET1_RGMII_RXC_LSIO_GPIO6_IO16        0x00000041
+@@ -1414,7 +1421,19 @@ IMX8QM_M41_I2C0_SCL_M41_I2C0_SCL			0x0600004c
+ 
+ 	pinctrl_adc0: adc0grp {
+ 		fsl,pins = <
+-			IMX8QM_ADC_IN0_DMA_ADC0_IN0				0xc0000060
++			IMX8QM_ADC_IN0_DMA_ADC0_IN0                   0x00000043
++			IMX8QM_ADC_IN1_DMA_ADC0_IN1                   0x00000043
++			IMX8QM_ADC_IN2_DMA_ADC0_IN2                   0x00000043
++			IMX8QM_ADC_IN3_DMA_ADC0_IN3                   0x00000043
++		>;
++	};
++
++	pinctrl_adc1: adc1grp {
++		fsl,pins = <
++			IMX8QM_ADC_IN4_DMA_ADC1_IN0                   0x00000043
++			IMX8QM_ADC_IN5_DMA_ADC1_IN1                   0x00000043
++			IMX8QM_ADC_IN6_DMA_ADC1_IN2                   0x00000043
++			IMX8QM_ADC_IN7_DMA_ADC1_IN3                   0x00000043
+ 		>;
+ 	};
+ 
+diff --git a/drivers/clk/imx/clk-imx8qxp-lpcg.h b/drivers/clk/imx/clk-imx8qxp-lpcg.h
+index ebca8fa9268f..3f77db93025f 100644
+--- a/drivers/clk/imx/clk-imx8qxp-lpcg.h
++++ b/drivers/clk/imx/clk-imx8qxp-lpcg.h
+@@ -92,6 +92,7 @@
+ #define ADMA_LPI2C_2_LPCG		0x1c20000
+ #define ADMA_LPI2C_3_LPCG		0x1c30000
+ #define ADMA_ADC_0_LPCG			0x1c80000
++#define ADMA_ADC_1_LPCG			0x1c90000
+ #define ADMA_FTM_0_LPCG			0x1ca0000
+ #define ADMA_FTM_1_LPCG			0x1cb0000
+ #define ADMA_FLEXCAN_0_LPCG		0x1cd0000
+diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/firmware/imx/scu-pd.c
+index fbef30aa49ba..ebaee07944c2 100755
+--- a/drivers/firmware/imx/scu-pd.c
++++ b/drivers/firmware/imx/scu-pd.c
+@@ -163,6 +163,7 @@ static const struct imx_sc_pd_range imx8qxp_scu_pd_ranges[] = {
+ 	{ "ftm", IMX_SC_R_FTM_0, 2, true, 0 },
+ 	{ "lpi2c", IMX_SC_R_I2C_0, 5, true, 0 },
+ 	{ "adc", IMX_SC_R_ADC_0, 2, true, 0 },
++	{ "adc1", IMX_SC_R_ADC_1, 2, true, 0 },
+ 	{ "lcd", IMX_SC_R_LCD_0, 1, true, 0 },
+ 	{ "lcd-pll", IMX_SC_R_ELCDIF_PLL, 1, true, 0 },
+ 	{ "lcd0-pwm", IMX_SC_R_LCD_0_PWM_0, 1, true, 0 },
+-- 
+2.25.1
+

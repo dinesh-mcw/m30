@@ -1,0 +1,10 @@
+[Unit]
+Description=Resize Root FS if needed
+Before=remote.service
+
+[Service]
+ExecStart=/usr/bin/cobra_resize_fs.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

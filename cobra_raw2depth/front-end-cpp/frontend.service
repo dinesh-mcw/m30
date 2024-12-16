@@ -1,0 +1,15 @@
+[Unit]
+Description=Cobra front end service
+
+# Needs networking
+Requires=network
+
+[Service]
+ExecStartPre=/bin/mkdir -p -m 777 /run/lumotive
+ExecStart=/usr/sbin/run_frontend
+Restart=always
+RestartSec=5s
+
+# This the default mode the Jetson boots in
+[Install]
+WantedBy=multi-user.target

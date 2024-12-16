@@ -1,0 +1,35 @@
+From ffbd84995deae1e7dac730d4f2c7ad76ddaf47e1 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Wed, 4 Jan 2023 15:43:56 -0700
+Subject: [PATCH 03/10] Update deployed /etc/fw_env.config
+
+---
+ tools/env/fw_env.config | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tools/env/fw_env.config b/tools/env/fw_env.config
+index 053895a2c0..d375b1aff8 100644
+--- a/tools/env/fw_env.config
++++ b/tools/env/fw_env.config
+@@ -8,8 +8,8 @@
+ 
+ # NOR example
+ # MTD device name	Device offset	Env. size	Flash sector size	Number of sectors
+-/dev/mtd1		0x0000		0x4000		0x4000
+-/dev/mtd2		0x0000		0x4000		0x4000
++#/dev/mtd1		0x0000		0x4000		0x4000
++#/dev/mtd2		0x0000		0x4000		0x4000
+ 
+ # MTD SPI-dataflash example
+ # MTD device name	Device offset	Env. size	Flash sector size	Number of sectors
+@@ -36,3 +36,7 @@
+ # UBI volume by name
+ #/dev/ubi0:env		0x0		0x1f000		0x1f000
+ #/dev/ubi0:env-redund	0x0		0x1f000		0x1f000
++
++# TBIRD Redundant Environment
++/dev/mmcblk0            0x400000        0x2000
++/dev/mmcblk0            0x402000        0x2000
+-- 
+2.25.1
+

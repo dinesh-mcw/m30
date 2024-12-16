@@ -1,0 +1,109 @@
+pipelines:
+  pull-requests:
+    '**':
+    - step:
+          name: Run Git Secrets Scan
+          script:
+            - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+            - pipe: docker://lumotive/devops-tasks:git-secrets-scan-latest
+          runs-on:
+            - 'self.hosted'
+            - 'linux'
+            - 'runner.docker'
+    - step:
+          name: Spell Check
+          script:
+            - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+            - pipe: docker://lumotive/devops-tasks:crate-ci-typos-check-latest
+              variables:
+                VERSION: '1.16.23'
+          runs-on:
+            - 'self.hosted'
+            - 'linux'
+            - 'runner.docker'
+    - step:
+        name: Run Cobra Lidar API Unit tests
+        script:
+          - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+          - pipe: docker://lumotive/devops-tasks:lidar_api_unittests
+            variables:
+              SSH_PRIVATE_KEY_PIPELINE: $SSH_PRIVATE_KEY_PIPELINE
+              SOURCE_CODE_DIR: $(pwd)
+              TEST_DIR: $TEST_DIR
+        artifacts:
+            - pytest_summary_report.json
+        runs-on:
+          - 'self.hosted'
+          - 'linux'
+          - 'runner.docker'
+    - step:
+        name: Run Python Code Coverage Checks
+        condition:
+          changesets:
+            includePaths:
+              - 'cobra_lidar_api/**'
+              - 'tests/unit/**'
+        script:
+          - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+          - pipe: docker://lumotive/devops-tasks:python_code_coverage
+            variables:
+              SSH_PRIVATE_KEY_PIPELINE: $SSH_PRIVATE_KEY_PIPELINE
+              SOURCE_CODE_DIR: $(pwd)
+              COVERAGE_SOURCE_DIR: $COVERAGE_SOURCE_DIR
+              COVERAGE_TEST_DIR: $COVERAGE_TEST_DIR
+        artifacts:
+            - coverage_py_report.json
+        runs-on:
+          - 'self.hosted'
+          - 'linux'
+          - 'runner.docker'
+    - step:
+        name: Code Coverage Report Generation
+        script: 
+          - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+          - pipe: docker://lumotive/devops-tasks:coverage_report
+            variables:
+              BITBUCKET_WORKSPACE: $BITBUCKET_WORKSPACE
+              BITBUCKET_REPO_SLUG: $BITBUCKET_REPO_SLUG
+              BITBUCKET_COMMIT: $BITBUCKET_COMMIT
+              COVERAGE_REPORT_APP_USERNAME: $COVERAGE_REPORT_APP_USERNAME
+              COVERAGE_REPORT_APP_PASSWORD: $COVERAGE_REPORT_APP_PASSWORD
+              SOURCE_CODE_DIR: $(pwd)
+        runs-on:
+          - 'self.hosted'
+          - 'linux'
+          - 'runner.docker'
+    - step:
+        name: Run Python Package License Validation Checks
+        condition:
+          changesets:
+            includePaths:
+              - 'pyproject.toml'
+        script:
+            - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+            - docker run -v "/opt/atlassian/pipelines/agent/build":/usr/src/app lumotive/devops-tasks:python_license_validator
+        services:
+            - docker
+        runs-on:
+          - 'self.hosted'
+          - 'linux'
+          - 'runner.docker'
+  branches:
+    master:
+     - step:
+        name: Trigger sync-source pipeline for Cobra LIDAR API for HM30
+        script:
+          - pipe: atlassian/trigger-pipeline:5.4.1
+            variables:
+              ACCOUNT: 'lumotive'
+              REPOSITORY: 'cobra_lidar_api_hm30'
+              BITBUCKET_USERNAME: $BITBUCKET_USERNAME_SYNC_SOURCE_CI
+              BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD_SYNC_SOURCE_CI
+              REF_TYPE: 'branch'
+              REF_NAME: 'master'
+              CUSTOM_PIPELINE_NAME: 'sync-source'
+              DEBUG: 'true'
+        runs-on:
+          - 'self.hosted'
+          - 'linux'
+          - 'runner.docker'

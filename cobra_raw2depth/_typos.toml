@@ -1,0 +1,18 @@
+[files]
+extend-exclude = [
+
+]
+
+[default.extend-words]
+# Don't correct the following constants and variable names
+FO = "FO"
+ND = "ND"
+ba = "ba"
+SOM = "SOM"
+# Below is a typo in source code. Please find and replace with caution. I have added it to exceptions list to not break raw2depth
+Suppress = "Suppress"
+mis = "mis"
+Supress = "Supress"
+parms = "parms"
+PARM = "PARM"
+parm = "parm"

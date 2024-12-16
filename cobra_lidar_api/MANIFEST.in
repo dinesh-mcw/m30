@@ -1,0 +1,1 @@
+recursive-include service/* static/css/* static/js/* static/images/* templates/* ./setup_lidar.sh ./mark_boot_good.sh

@@ -1,0 +1,7 @@
+rootfs=`sed -n 's/.*root=\([^][,[:space:]]*\).*/\1/p' /proc/cmdline`
+
+selection="-e stable,copy1"
+
+SWUPDATE_SURICATTA_ARGS=""
+
+SWUPDATE_ARGS="-H tbird:1.0 ${selection} -f /etc/swupdate.cfg -p reboot "

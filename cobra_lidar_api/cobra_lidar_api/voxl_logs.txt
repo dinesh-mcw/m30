@@ -1,0 +1,84 @@
+ * Serving Flask app 'cobra_lidar_api.web_server'
+ * Debug mode: off
+POST request received with data: {'angle_range': [[39.0, 45.0, 1.0]], 'fps_multiple': [1], 'laser_power_percent': [100], 'inte_time_us': [15], 'max_range_m': [25.2], 'frame_rate_hz': [960], 'binning': [2]}
+clamping inf to maximum (0.0078105926513671875) as it was out of range
+clamping inf to maximum (0.0078105926513671875) as it was out of range
+ScanTable: 
+                                     0             1             2             3             4             5             6
+roi_sel                       0.000000      1.000000      2.000000      3.000000      4.000000      5.000000      6.000000
+roi_id                       64.000000     61.000000     60.000000     58.000000     56.000000     54.000000     53.000000
+virtual_sensor_bitmask        1.000000      1.000000      1.000000      1.000000      1.000000      1.000000      1.000000
+start_stop_flags              1.000000      0.000000      0.000000      0.000000      0.000000      0.000000      2.000000
+min_frm_length               63.000000     63.000000     63.000000     63.000000     63.000000     63.000000     63.000000
+laser_ci                      1.800000      1.800000      1.800000      1.800000      1.800000      1.800000      1.800000
+laser_ci_hdr                  1.343824      1.343824      1.343824      1.343824      1.343824      1.343824      1.343824
+npulse_group_f1              75.000000     75.000000     75.000000     75.000000     75.000000     75.000000     75.000000
+npulse_group_f0              75.000000     75.000000     75.000000     75.000000     75.000000     75.000000     75.000000
+mod_freq1_opt                 4.000000      4.000000      4.000000      4.000000      4.000000      4.000000      4.000000
+mod_freq0_opt                 5.000000      5.000000      5.000000      5.000000      5.000000      5.000000      5.000000
+sensor_mode                   0.000000      0.000000      0.000000      0.000000      0.000000      0.000000      0.000000
+rwin0_l                      12.000000     12.000000     12.000000     12.000000     12.000000     12.000000     12.000000
+rwin0_s                     442.000000    447.000000    451.000000    455.000000    459.000000    463.000000    467.000000
+dpulse_group_f1              51.000000     51.000000     51.000000     51.000000     51.000000     51.000000     51.000000
+dpulse_group_f0              51.000000     51.000000     51.000000     51.000000     51.000000     51.000000     51.000000
+inte_burst_length_f1         34.000000     34.000000     34.000000     34.000000     34.000000     34.000000     34.000000
+inte_burst_length_f0         29.000000     29.000000     29.000000     29.000000     29.000000     29.000000     29.000000
+inte_burst_length_f1_hdr      2.000000      2.000000      2.000000      2.000000      2.000000      2.000000      2.000000
+inte_burst_length_f0_hdr      1.000000      1.000000      1.000000      1.000000      1.000000      1.000000      1.000000
+steering_idx                 63.000000     60.000000     59.000000     57.000000     55.000000     53.000000     52.000000
+pol_cnt_tc_1                  2.000000      2.000000      2.000000      2.000000      2.000000      2.000000      2.000000
+pol_cnt_tc_0                  0.000000      0.000000      0.000000      0.000000      0.000000      0.000000      0.000000
+tp1_period_1              17046.000000  17046.000000  17046.000000  17046.000000  17046.000000  17046.000000  17046.000000
+tp1_period_0               8146.000000   8146.000000   8146.000000   8146.000000   8146.000000   8146.000000   8146.000000
+ito_phase_tc_1                0.000000      0.000000      0.000000      0.000000      0.000000      0.000000      0.000000
+ito_phase_tc_0                0.000000      0.000000      0.000000      0.000000      0.000000      0.000000      0.000000
+ito_toggle_tc_1           17099.000000  17099.000000  17099.000000  17099.000000  17099.000000  17099.000000  17099.000000
+ito_toggle_tc_0            8199.000000   8199.000000   8199.000000   8199.000000   8199.000000   8199.000000   8199.000000
+scan_fetch_delay            857.000000    857.000000    857.000000    857.000000    857.000000    857.000000    857.000000
+scan_trigger_delay           85.000000     85.000000     85.000000     85.000000     85.000000     85.000000     85.000000
+sync_laser_lvds_mg           42.000000     42.000000     42.000000     42.000000     42.000000     42.000000     42.000000
+
+Static Metadata: 
+                                     0
+rtd_output                           0
+reduce_mode                          1
+sensor_sn                            0
+test_mode                            0
+quant_mode                           0
+mipi_raw_mode                        1
+hdr_threshold                     4095
+system_type                          3
+rx_pcb_type                          0
+tx_pcb_type                          0
+lcm_type                             2
+range_cal_offset_mm_lo_0807          0
+range_cal_offset_mm_hi_0807          0
+range_cal_mm_per_volt_lo_0807        0
+range_cal_mm_per_volt_hi_0807        0
+range_cal_mm_per_celsius_lo_0807     0
+range_cal_mm_per_celsius_hi_0807     0
+range_cal_offset_mm_lo_0908          0
+range_cal_offset_mm_hi_0908          0
+range_cal_mm_per_volt_lo_0908        0
+range_cal_mm_per_volt_hi_0908        0
+range_cal_mm_per_celsius_lo_0908     0
+range_cal_mm_per_celsius_hi_0908     0
+adc_cal_gain                      4095
+adc_cal_offset                       0
+random_scan_table_tag             2745
+
+VirtualSensor Metadata: 
+user_tag:  2109
+binning:  2
+s_rows:  0
+n_rows:  480
+n_rois:  7
+rtd_algorithm_common:  12
+rtd_algorithm_grid_mode:  6
+rtd_algorithm_stripe_mode:  0
+snr_threshold:  14
+nn_level:  0
+random_virtual_sensor_tag:  2969
+
+Db Sensor Configuration: 
+{'binning': 2, 'snr_threshold': 14, 'rtd_algorithm_common': 12, 'rtd_algorithm_grid_mode': 6, 'rtd_algorithm_stripe_mode': 0, 'nn_level': 0, 'reduce_mode': 1, 'hdr_threshold': 4095}

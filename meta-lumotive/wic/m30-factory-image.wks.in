@@ -1,0 +1,27 @@
+# short-description: Create M30 wic image
+# long-description: Create M30 wic image that combines the rescue image and
+# main rootfs for simplified programming. Partitions in the wic image are
+# created with a fixed size to ensure correct partition size on disk. Empty
+# space is filled with sparse files (zero data) that can be skipped during
+# programming using the bmap file.
+#
+# The disk layout for 32 GB (29.640625 GiB) eMMC is:
+#                                                                 <-- 1 GiB -->
+#   - ------ ---- ---------- -------------- ---------------------- ------ ----
+#  | | PGPT |    | imx-boot |    rescue    |        rootfs        | SGPT |    |
+#   - ------ ---- ---------- -------------- ---------------------- ------ ----
+#  ^ ^      ^    ^          ^              ^                      ^      ^    ^
+#  | |      |    |          |              |                      |      |    |
+#  0 |      |    |        8 MiB        264 MiB              29328 MiB    |    |
+#    |      |    |                                                       |    |
+#    |      |    ${IMX_BOOT_SEEK} 32 or 33 kiB, see reference manual     |    |
+#    |      |                                                            |    |
+#    |      Primary GPT end (17 KiB)                                     |    Flash end (30352 MiB)
+#    |                                                                   |
+#    Primary GPT Header (512 B)                                          Secondary GPT end (29328 MiB + 16.5 KiB)
+
+part u-boot --source rawcopy --ondisk mmcblk --align ${IMX_BOOT_SEEK}    --no-table    --sourceparams="file=imx-boot"
+part        --source rawcopy --ondisk mmcblk --align 8192 --label rescue --fstype=ext4 --sourceparams="file=rescue-image-${MACHINE}.ext4.gz,unpack"   --fixed-size 256M
+part /      --source rawcopy --ondisk mmcblk --align 8192 --label root   --fstype=ext4 --sourceparams="file=m30-core-image-${MACHINE}.ext4.gz,unpack" --fixed-size 29064M
+
+bootloader --ptable gpt

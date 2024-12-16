@@ -1,0 +1,56 @@
+From 9516184104a607d30ed222517fdcc7167c321181 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Wed, 15 Feb 2023 09:35:58 -0700
+Subject: [PATCH 06/10] Adding main/recovery switch bootscript.
+
+---
+ configs/imx8qm_mek_defconfig |  2 +-
+ include/configs/imx8qm_mek.h | 19 ++++++++++++++++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/configs/imx8qm_mek_defconfig b/configs/imx8qm_mek_defconfig
+index 464730e896..bdd5918727 100644
+--- a/configs/imx8qm_mek_defconfig
++++ b/configs/imx8qm_mek_defconfig
+@@ -33,7 +33,7 @@ CONFIG_PANIC_HANG=y
+ CONFIG_OF_SYSTEM_SETUP=y
+ CONFIG_BOOTDELAY=3
+ CONFIG_USE_BOOTCOMMAND=y
+-CONFIG_BOOTCOMMAND="mmc dev ${mmcdev}; if mmc rescan; then if run loadbootscript; then run bootscript; else if test ${sec_boot} = yes; then if run loadcntr; then run mmcboot; else run netboot; fi; else if run loadimage; then run mmcboot; else run netboot; fi; fi; fi; else booti ${loadaddr} - ${fdt_addr}; fi"
++CONFIG_BOOTCOMMAND="test -n \"${BOOT_ORDER}\" || setenv BOOT_ORDER \"RESCUE MAIN\"; test -n \"${BOOT_RESCUE_LEFT}\" || setenv BOOT_RESCUE_LEFT 3; test -n \"${BOOT_MAIN_LEFT}\" || setenv BOOT_MAIN_LEFT 5; setenv mmcroot; for BOOT_SLOT in \"${BOOT_ORDER}\"; do if test \"x${mmcroot}\" = \"x\"; then if test \"x${BOOT_SLOT}\" = \"xRESCUE\"; then if test ${BOOT_RESCUE_LEFT} -gt 0; then echo \"Found valid slot RESCUE, ${BOOT_RESCUE_LEFT} attempts remaining\" ; setexpr BOOT_RESCUE_LEFT ${BOOT_RESCUE_LEFT} - 1 ; setenv mmcpart 1 ; setenv mmcroot \"/dev/mmcblk0p1 rootwait rw\" ; fi ; elif test \"x${BOOT_SLOT}\" = \"xMAIN\"; then if test ${BOOT_MAIN_LEFT} -gt 0; then echo \"Found valid slot MAIN, ${BOOT_MAIN_LEFT} attempts remaining\" ; setexpr BOOT_MAIN_LEFT ${BOOT_MAIN_LEFT} - 1 ; setenv mmcpart 2 ; setenv mmcroot \"/dev/mmcblk0p2 rootwait rw\" ; fi ; fi ; fi ; done ; if test -n \"${mmcroot}\"; then saveenv ; else echo \"No valid slot found, resetting counters\" ; setenv BOOT_RESCUE_LEFT 3 ; setenv BOOT_MAIN_LEFT 5 ; saveenv ; reset ; fi ; run bootcmd2"
+ CONFIG_LOG=y
+ CONFIG_BOARD_EARLY_INIT_F=y
+ CONFIG_SPL_BOARD_INIT=y
+diff --git a/include/configs/imx8qm_mek.h b/include/configs/imx8qm_mek.h
+index 90d6065223..e7c5d8ab51 100644
+--- a/include/configs/imx8qm_mek.h
++++ b/include/configs/imx8qm_mek.h
+@@ -252,7 +252,24 @@
+ 			"else " \
+ 				"booti; " \
+ 			"fi;" \
+-		"fi;\0"
++		"fi;\0" \
++	"bootcmd2=mmc dev ${mmcdev}; if mmc rescan; then "\
++		"if run loadbootscript; then " \
++			"run bootscript; " \
++		"else " \
++			"if test ${sec_boot} = yes; then " \
++				"if run loadcntr; then " \
++					"run mmcboot; " \
++				"else run netboot; " \
++				"fi; " \
++			"else " \
++				"if run loadimage; then " \
++					"run mmcboot; " \
++				"else run netboot; " \
++				"fi; " \
++			"fi; " \
++		"fi; " \
++		"else booti ${loadaddr} - ${fdt_addr}; fi;\0"
+ 
+ /* Link Definitions */
+ #ifdef CONFIG_TARGET_IMX8QM_MEK_A72_ONLY
+-- 
+2.25.1
+

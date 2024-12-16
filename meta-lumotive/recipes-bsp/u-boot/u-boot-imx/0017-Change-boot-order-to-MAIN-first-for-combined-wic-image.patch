@@ -1,0 +1,22 @@
+From 3aa08f41fb81c914a11c5ab4932cfdd6f682cd2c Mon Sep 17 00:00:00 2001
+From: Caleb Osterman <caleb.osterman@lumotive.com>
+Date: Wed, 28 Feb 2024 15:39:49 -0800
+Subject: [PATCH] Change boot order to MAIN first for combined wic image
+
+---
+ configs/imx8qm_mek_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/imx8qm_mek_defconfig b/configs/imx8qm_mek_defconfig
+index 282fc96349..de8362e3ff 100644
+--- a/configs/imx8qm_mek_defconfig
++++ b/configs/imx8qm_mek_defconfig
+@@ -33,7 +33,7 @@ CONFIG_PANIC_HANG=y
+ CONFIG_OF_SYSTEM_SETUP=y
+ CONFIG_BOOTDELAY=0
+ CONFIG_USE_BOOTCOMMAND=y
+-CONFIG_BOOTCOMMAND="test -n \"${BOOT_ORDER}\" || setenv BOOT_ORDER \"RESCUE MAIN\"; test -n \"${BOOT_RESCUE_LEFT}\" || setenv BOOT_RESCUE_LEFT 3; test -n \"${BOOT_MAIN_LEFT}\" || setenv BOOT_MAIN_LEFT 5; if test -n \"${recovery_status}\"; then setenv BOOT_MAIN_LEFT 0 ; fi ; setenv mmcroot; for BOOT_SLOT in \"${BOOT_ORDER}\"; do if test \"x${mmcroot}\" = \"x\"; then if test \"x${BOOT_SLOT}\" = \"xRESCUE\"; then if test ${BOOT_RESCUE_LEFT} -gt 0; then echo \"Found valid slot RESCUE, ${BOOT_RESCUE_LEFT} attempts remaining\" ; setexpr BOOT_RESCUE_LEFT ${BOOT_RESCUE_LEFT} - 1 ; setenv mmcpart 1 ; setenv mmcroot \"/dev/mmcblk0p1 rootwait rw\" ; fi ; elif test \"x${BOOT_SLOT}\" = \"xMAIN\"; then if test ${BOOT_MAIN_LEFT} -gt 0; then echo \"Found valid slot MAIN, ${BOOT_MAIN_LEFT} attempts remaining\" ; setexpr BOOT_MAIN_LEFT ${BOOT_MAIN_LEFT} - 1 ; setenv mmcpart 2 ; setenv mmcroot \"/dev/mmcblk0p2 rootwait rw\" ; fi ; fi ; fi ; done ; if test -n \"${mmcroot}\"; then saveenv ; else echo \"No valid slot found, resetting counters\" ; setenv BOOT_RESCUE_LEFT 3 ; setenv BOOT_MAIN_LEFT 5 ; saveenv ; reset ; fi ; run bootcmd2"
++CONFIG_BOOTCOMMAND="test -n \"${BOOT_ORDER}\" || setenv BOOT_ORDER \"MAIN RESCUE\"; test -n \"${BOOT_RESCUE_LEFT}\" || setenv BOOT_RESCUE_LEFT 3; test -n \"${BOOT_MAIN_LEFT}\" || setenv BOOT_MAIN_LEFT 5; if test -n \"${recovery_status}\"; then setenv BOOT_MAIN_LEFT 0 ; fi ; setenv mmcroot; for BOOT_SLOT in \"${BOOT_ORDER}\"; do if test \"x${mmcroot}\" = \"x\"; then if test \"x${BOOT_SLOT}\" = \"xRESCUE\"; then if test ${BOOT_RESCUE_LEFT} -gt 0; then echo \"Found valid slot RESCUE, ${BOOT_RESCUE_LEFT} attempts remaining\" ; setexpr BOOT_RESCUE_LEFT ${BOOT_RESCUE_LEFT} - 1 ; setenv mmcpart 1 ; setenv mmcroot \"/dev/mmcblk0p1 rootwait rw\" ; fi ; elif test \"x${BOOT_SLOT}\" = \"xMAIN\"; then if test ${BOOT_MAIN_LEFT} -gt 0; then echo \"Found valid slot MAIN, ${BOOT_MAIN_LEFT} attempts remaining\" ; setexpr BOOT_MAIN_LEFT ${BOOT_MAIN_LEFT} - 1 ; setenv mmcpart 2 ; setenv mmcroot \"/dev/mmcblk0p2 rootwait rw\" ; fi ; fi ; fi ; done ; if test -n \"${mmcroot}\"; then saveenv ; else echo \"No valid slot found, resetting counters\" ; setenv BOOT_RESCUE_LEFT 3 ; setenv BOOT_MAIN_LEFT 5 ; saveenv ; reset ; fi ; run bootcmd2"
+ CONFIG_LOG=y
+ CONFIG_BOARD_EARLY_INIT_F=y
+ CONFIG_SPL_BOARD_INIT=y

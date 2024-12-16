@@ -1,0 +1,10 @@
+[Unit]
+Description=Make main partition if needed
+Before=swupdate.service
+
+[Service]
+ExecStart=/usr/bin/cobra_mk_main.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

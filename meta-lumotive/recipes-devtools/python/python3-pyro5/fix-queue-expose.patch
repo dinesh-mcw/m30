@@ -1,0 +1,9 @@
+--- a/Pyro5/server.py  2023-06-27 15:31:22.976058699 -0600
++++ b/Pyro5/server.py  2023-06-27 15:29:05.625800241 -0600
+@@ -33,7 +33,7 @@
+     "__dir__", "__enter__", "__exit__", "__copy__", "__deepcopy__", "__sizeof__",
+     "__getattr__", "__setattr__", "__hasattr__", "__getattribute__", "__delattr__",
+     "__instancecheck__", "__subclasscheck__", "__getinitargs__", "__getnewargs__",
+-    "__getstate__", "__setstate__", "__reduce__", "__reduce_ex__", "__subclasshook__"
++    "__getstate__", "__setstate__", "__reduce__", "__reduce_ex__", "__subclasshook__", "__class_getitem__"
+ ])

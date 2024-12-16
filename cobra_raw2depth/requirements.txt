@@ -1,0 +1,11 @@
+-e ../utilities
+setuptools
+numpy
+nose-testconfig
+nose
+parameterized
+scipy
+matplotlib
+scikit-image
+open3d
+imageio

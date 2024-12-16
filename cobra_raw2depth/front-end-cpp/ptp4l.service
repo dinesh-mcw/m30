@@ -1,0 +1,15 @@
+[Unit]
+Description=PTP service
+
+# Needs networking
+Requires=network
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/run_ptp4l
+Restart=always
+RestartSec=5s
+
+# This the default mode the Jetson boots in
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,210 @@
+From 0af115443a523bdca5b8924fede7a413cce4ccdf Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Tue, 3 Jan 2023 17:45:53 -0700
+Subject: [PATCH 5/7] Hog GPIO lines
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 103 +++++++++++++------
+ 1 file changed, 71 insertions(+), 32 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index c7b31bde4f58..dd36e49ef7a8 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -75,6 +75,7 @@ modem_reset: modem-reset {
+ 		reset-delay-us = <2000>;
+ 		reset-post-delay-ms = <40>;
+ 		#reset-cells = <0>;
++		status = "disabled";
+ 	};
+ 
+ 	cbtl04gp {
+@@ -84,6 +85,7 @@ cbtl04gp {
+ 		switch-gpios = <&lsio_gpio4 6 GPIO_ACTIVE_LOW>;
+ 		reset-gpios = <&lsio_gpio4 19 GPIO_ACTIVE_HIGH>;
+ 		orientation-switch;
++		status = "disabled";
+ 
+ 		port {
+ 			usb3_data_ss: endpoint {
+@@ -682,7 +684,7 @@ adv_bridge0: adv7535@3d {
+ 		adi,dsi-channel = <1>;
+ 		interrupt-parent = <&lsio_gpio1>;
+ 		interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+-		status = "okay";
++		status = "disabled";
+ 
+ 		port@0 {
+ 			reg = <0>;
+@@ -694,11 +696,11 @@ adv7535_0_in: endpoint {
+ };
+ 
+ &mipi0_dphy {
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &mipi0_dsi_host {
+-	status = "okay";
++	status = "disabled";
+ 
+ 	ports {
+ 		port@1 {
+@@ -729,7 +731,7 @@ adv_bridge1: adv7535@3d {
+ 		adi,dsi-channel = <1>;
+ 		interrupt-parent = <&lsio_gpio1>;
+ 		interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
+-		status = "okay";
++		status = "disabled";
+ 
+ 		port@0 {
+ 			reg = <0>;
+@@ -741,11 +743,11 @@ adv7535_1_in: endpoint {
+ };
+ 
+ &mipi1_dphy {
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &mipi1_dsi_host {
+-	status = "okay";
++	status = "disabled";
+ 
+ 	ports {
+ 		port@1 {
+@@ -881,7 +883,7 @@ &lpspi2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lpspi2 &pinctrl_lpspi2_cs>;
+ 	cs-gpios = <&lsio_gpio3 10 GPIO_ACTIVE_LOW>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	spidev0: spi@0 {
+ 		reg = <0>;
+@@ -906,7 +908,7 @@ &lpuart1 { /* BT */
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lpuart1>;
+ 	resets = <&modem_reset>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &lpuart2 { /* Dbg console */
+@@ -932,14 +934,14 @@ &flexcan2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_flexcan2>;
+ 	xceiver-supply = <&reg_can01_stby>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &flexcan3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_flexcan3>;
+ 	xceiver-supply = <&reg_can2_stby>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &fec1 {
+@@ -1150,7 +1152,7 @@ ptn5110: tcpc@51 {
+ 		reg = <0x51>;
+ 		interrupt-parent = <&lsio_gpio4>;
+ 		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
+-		status = "okay";
++		status = "disabled";
+ 
+ 		port {
+ 			typec_dr_sw: endpoint {
+@@ -1386,29 +1388,66 @@ &iomuxc {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_hog>;
+ 
++	/delete-node/ pinctrl_flexcan3;
++	/delete-node/ pinctrl_modem_reset;
++	/delete-node/ pinctrl_modem_reset_sleep;
++
+ 	pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+-//			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
+-//			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
+-//			IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x0600004c
+-			IMX8QM_ENET1_MDC_LSIO_GPIO4_IO18              0x00000041
+-			IMX8QM_ENET1_REFCLK_125M_25M_LSIO_GPIO4_IO16  0x00000041
+-			IMX8QM_ENET1_RGMII_RXC_LSIO_GPIO6_IO16        0x00000041
+-			IMX8QM_ENET1_RGMII_RXD0_LSIO_GPIO6_IO18       0x00000041
+-			IMX8QM_ENET1_RGMII_RXD1_LSIO_GPIO6_IO19       0x00000041
+-			IMX8QM_ENET1_RGMII_RXD2_LSIO_GPIO6_IO20       0x00000041
+-			IMX8QM_ENET1_RGMII_RXD3_LSIO_GPIO6_IO21       0x00000041
+-			IMX8QM_ENET1_RGMII_RX_CTL_LSIO_GPIO6_IO17     0x00000041
+-			IMX8QM_ENET1_RGMII_TXC_LSIO_GPIO6_IO10        0x00000041
+-			IMX8QM_ENET1_RGMII_TXD0_LSIO_GPIO6_IO12       0x00000041
+-			IMX8QM_ENET1_RGMII_TXD1_LSIO_GPIO6_IO13       0x00000041
+-			IMX8QM_ENET1_RGMII_TXD2_LSIO_GPIO6_IO14       0x00000041
+-			IMX8QM_ENET1_RGMII_TXD3_LSIO_GPIO6_IO15       0x00000041
+-			IMX8QM_ENET1_RGMII_TX_CTL_LSIO_GPIO6_IO11     0x00000041
+-
+-			IMX8QM_SPI0_SDO_LSIO_GPIO3_IO03               0x00000041
+-			IMX8QM_MCLK_IN0_LSIO_GPIO3_IO00               0x00000041
+-			IMX8QM_MCLK_OUT0_LSIO_GPIO3_IO01              0x00000041
++			IMX8QM_ENET1_RGMII_RXC_LSIO_GPIO6_IO16			0x00000041	// STATUS_LED
++			IMX8QM_ENET1_RGMII_RXD1_LSIO_GPIO6_IO19			0x00000041	// DBG_LED2
++			IMX8QM_ENET1_RGMII_RXD2_LSIO_GPIO6_IO20			0x00000041	// DBG_LED1
++			IMX8QM_ENET1_RGMII_RXD3_LSIO_GPIO6_IO21			0x00000041	// DBG_LED0
++			IMX8QM_ENET1_RGMII_TXC_LSIO_GPIO6_IO10			0x00000041	// TRIG_IN
++			IMX8QM_ENET1_RGMII_TXD1_LSIO_GPIO6_IO13			0x00000041	// 1PPS_SEL
++			IMX8QM_ENET1_RGMII_TXD3_LSIO_GPIO6_IO15			0x00000041	// POWER_LED
++			IMX8QM_ENET1_RGMII_TX_CTL_LSIO_GPIO6_IO11		0x00000041	// TRIG_OUT
++			IMX8QM_SPI3_SCK_LSIO_GPIO2_IO17				0x00000041	// RX_24V_EN
++			IMX8QM_SPI3_SDO_LSIO_GPIO2_IO18				0x00000041	// RX_18V_EN
++			IMX8QM_SPI3_SDI_LSIO_GPIO2_IO19				0x00000041	// RX_3.3V_EN
++			IMX8QM_SPI3_CS0_LSIO_GPIO2_IO20				0x00000041	// LASER_PWR_DN
++			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
++			IMX8QM_MIPI_DSI0_GPIO0_01_LSIO_GPIO1_IO19		0x00000041	// SELECT_I2C_GPIO
++			IMX8QM_USDHC2_CLK_LSIO_GPIO5_IO24			0x00000041	// ERROR_GPIO0
++			IMX8QM_USDHC2_CMD_LSIO_GPIO5_IO25			0x00000041	// INTERRUPT_GPIO1
++			IMX8QM_USDHC2_DATA0_LSIO_GPIO5_IO26			0x00000041	// RX_GPIO2
++			IMX8QM_USDHC2_DATA1_LSIO_GPIO5_IO27			0x00000041	// RX_GPIO3
++			IMX8QM_USDHC2_DATA2_LSIO_GPIO5_IO28			0x00000041	// RX_GPIO4
++			IMX8QM_USDHC2_DATA3_LSIO_GPIO5_IO29			0x00000041	// RX_GPIO5
++			IMX8QM_SPDIF0_TX_LSIO_GPIO2_IO15			0x00000041	// PGOOD_5.0
++/*
++			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
++			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
++			IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x0600004c
++			IMX8QM_ENET1_MDC_LSIO_GPIO4_IO18			0x00000041
++			IMX8QM_ENET1_REFCLK_125M_25M_LSIO_GPIO4_IO16		0x00000041
++			IMX8QM_ENET1_RGMII_RXD0_LSIO_GPIO6_IO18			0x00000041
++			IMX8QM_ENET1_RGMII_RX_CTL_LSIO_GPIO6_IO17		0x00000041
++			IMX8QM_ENET1_RGMII_TXD0_LSIO_GPIO6_IO12			0x00000041
++			IMX8QM_ENET1_RGMII_TXD2_LSIO_GPIO6_IO14			0x00000041
++			IMX8QM_SPI0_SDO_LSIO_GPIO3_IO03				0x00000041
++			IMX8QM_MCLK_IN0_LSIO_GPIO3_IO00				0x00000041
++			IMX8QM_MCLK_OUT0_LSIO_GPIO3_IO01			0x00000041
++			IMX8QM_FLEXCAN1_TX_LSIO_GPIO4_IO00			0x00000041
++			IMX8QM_FLEXCAN2_TX_LSIO_GPIO4_IO02			0x00000041
++			IMX8QM_FLEXCAN2_RX_LSIO_GPIO4_IO01			0x00000041
++			IMX8QM_FLEXCAN2_RX_LSIO_GPIO4_IO01			0x00000041
++			IMX8QM_QSPI1A_SS0_B_LSIO_GPIO4_IO19			0x00000041
++			IMX8QM_QSPI1A_SS1_B_LSIO_GPIO4_IO20			0x00000041
++			IMX8QM_QSPI1A_SCLK_LSIO_GPIO4_IO21			0x00000041
++			IMX8QM_QSPI1A_DQS_LSIO_GPIO4_IO22			0x00000041
++			IMX8QM_QSPI1A_DATA3_LSIO_GPIO4_IO23			0x00000041
++			IMX8QM_QSPI1A_DATA2_LSIO_GPIO4_IO24			0x00000041
++			IMX8QM_QSPI1A_DATA0_LSIO_GPIO4_IO26			0x00000041
++			IMX8QM_SPI3_CS1_LSIO_GPIO2_IO21				0x00000041
++			IMX8QM_SPI2_SCK_LSIO_GPIO3_IO07				0x00000041
++			IMX8QM_SPI2_SDO_LSIO_GPIO3_IO08				0x00000041
++			IMX8QM_SPI2_SDI_LSIO_GPIO3_IO09				0x00000041
++			IMX8QM_SPI2_CS0_LSIO_GPIO3_IO10				0x00000041
++			IMX8QM_SPI2_CS1_LSIO_GPIO3_IO11				0x00000041
++			IMX8QM_MIPI_DSI1_I2C0_SCL_LSIO_GPIO1_IO20		0x00000041
++			IMX8QM_MIPI_DSI1_I2C0_SDA_LSIO_GPIO1_IO21		0x00000041
++*/
+ 		>;
+ 	};
+ 
+-- 
+2.25.1
+

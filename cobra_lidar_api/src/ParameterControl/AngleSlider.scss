@@ -1,0 +1,25 @@
+@use "../custom.scss";
+
+//.noUi-connect {
+//  background: custom.$lumo-blue;
+//}
+
+.blue .noUi-connect {
+  background: custom.$lumo-blue;
+}
+
+.red .noUi-connect {
+  background: custom.$lumo-red;
+}
+
+.green .noUi-connect {
+  background: custom.$lumo-green;
+}
+
+.grey .noUi-connect {
+  background: custom.$lumo-grey;
+}
+
+.yellow .noUi-connect {
+  background: custom.$lumo-yellow;
+}

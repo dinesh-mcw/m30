@@ -1,0 +1,29 @@
+From 20a30c6033c26ebcc2f525919489b7d2b15a44b4 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Fri, 5 May 2023 16:49:11 -0600
+Subject: [PATCH] Use the m30 dtb file by default
+
+---
+ board/freescale/imx8qm_mek/imx8qm_mek.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/board/freescale/imx8qm_mek/imx8qm_mek.c b/board/freescale/imx8qm_mek/imx8qm_mek.c
+index 8c16447223..1685a0488e 100644
+--- a/board/freescale/imx8qm_mek/imx8qm_mek.c
++++ b/board/freescale/imx8qm_mek/imx8qm_mek.c
+@@ -491,9 +491,10 @@ int board_late_init(void)
+ #else
+ 		m4_booted = m4_parts_booted();
+ 		if (m4_booted)
+-			env_set("fdt_file", "boot/imx8qm-mek-rpmsg.dtb");
++//			env_set("fdt_file", "boot/imx8qm-mek-rpmsg.dtb");
++			env_set("fdt_file", "boot/imx8qm-mek-m30.dtb");
+ 		else
+-			env_set("fdt_file", "boot/imx8qm-mek.dtb");
++			env_set("fdt_file", "boot/imx8qm-mek-m30.dtb");
+ #endif
+ 	}
+ 
+-- 
+2.25.1
+

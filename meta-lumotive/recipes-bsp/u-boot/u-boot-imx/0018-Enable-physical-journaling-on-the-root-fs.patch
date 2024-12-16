@@ -1,0 +1,25 @@
+From ec824707d9e59db2c9c2791ba24dd4902c56d876 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Fri, 26 Apr 2024 16:46:48 -0600
+Subject: [PATCH] Enable physical journaling on the root fs
+
+---
+ include/configs/imx8qm_mek.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/imx8qm_mek.h b/include/configs/imx8qm_mek.h
+index 6e0696ef08..94ddbf2726 100644
+--- a/include/configs/imx8qm_mek.h
++++ b/include/configs/imx8qm_mek.h
+@@ -184,7 +184,7 @@
+ 	"mmcpart=1\0" \
+ 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
+ 	"mmcautodetect=yes\0" \
+-	"mmcargs=setenv bootargs console=${console},${baudrate} earlycon root=${mmcroot} " \
++	"mmcargs=setenv bootargs console=${console},${baudrate} earlycon root=${mmcroot} rootflags=data=journal " \
+ 		"cpufreq.default_governor=SCHEDUTIL quiet audit=0\0" \
+ 	"loadbootscript=ext4load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+-- 
+2.25.1
+

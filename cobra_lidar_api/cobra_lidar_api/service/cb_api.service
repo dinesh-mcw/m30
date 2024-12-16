@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn instance of cobra_lidar
+After=remote_cobra.service network-online.target
+
+[Service]
+ExecStart=/usr/bin/run_cb_api
+RestartSec=5s
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

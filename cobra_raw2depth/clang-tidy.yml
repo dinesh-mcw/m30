@@ -1,0 +1,6 @@
+FormatStyle: file
+Checks: '-*,readability-*,bugprone-*,hicpp-*,clang-analyzer-cplusplus.Move,-bugprone-easily-swappable-parameters'
+CheckOptions:
+    - key:      readability-function-cognitive-complexity.IgnoreMacros
+      value:    'true'
+HeaderFilterRegex: '.*'

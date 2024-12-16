@@ -1,0 +1,70 @@
+From 4ffdfc2cdda401084cab29b65728ad972e409019 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Wed, 3 May 2023 17:00:43 -0600
+Subject: [PATCH 6/7] Support ADIN PHY
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 21 +++++---------------
+ arch/arm64/configs/imx_v8_defconfig          |  1 +
+ 2 files changed, 6 insertions(+), 16 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index dd36e49ef7a8..f65d705c5011 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -947,7 +947,7 @@ &flexcan3 {
+ &fec1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_fec1>;
+-	phy-mode = "rgmii-txid";
++	phy-mode = "rgmii-id";
+ 	phy-handle = <&ethphy0>;
+ 	fsl,magic-packet;
+ 	nvmem-cells = <&fec_mac0>;
+@@ -960,27 +960,16 @@ mdio {
+ 		#size-cells = <0>;
+ 
+ 		ethphy0: ethernet-phy@0 {
+-			compatible = "ethernet-phy-ieee802.3-c22";
++			compatible = "ethernet-phy-ieee802.3-c22"; // is this necessary?
+ 			reg = <0>;
+-			qca,disable-smarteee;
+-			vddio-supply = <&vddio0>;
+-
+-			vddio0: vddio-regulator {
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-			};
++            adi,rx-internal-delay-ps = <2000>;
++            adi,tx-internal-delay-ps = <2000>;
+ 		};
+ 
+ 		ethphy1: ethernet-phy@1 {
+ 			compatible = "ethernet-phy-ieee802.3-c22";
+ 			reg = <1>;
+-			qca,disable-smarteee;
+-			vddio-supply = <&vddio1>;
+-
+-			vddio1: vddio-regulator {
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-			};
++            status = "disabled";
+ 		};
+ 	};
+ };
+diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
+index 1ef259ee4254..c741556b43a9 100644
+--- a/arch/arm64/configs/imx_v8_defconfig
++++ b/arch/arm64/configs/imx_v8_defconfig
+@@ -312,6 +312,7 @@ CONFIG_SMC91X=y
+ CONFIG_SMSC911X=y
+ CONFIG_STMMAC_ETH=y
+ CONFIG_DWMAC_GENERIC=m
++CONFIG_ADIN_PHY=y
+ CONFIG_AQUANTIA_PHY=y
+ CONFIG_BROADCOM_PHY=m
+ CONFIG_BCM54140_PHY=m
+-- 
+2.25.1
+

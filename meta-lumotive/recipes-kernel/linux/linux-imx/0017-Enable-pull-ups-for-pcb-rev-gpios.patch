@@ -1,0 +1,104 @@
+From 82aafa825b5c448cc66a4b93fc41e1e2c9c201e0 Mon Sep 17 00:00:00 2001
+From: Caleb Osterman <caleb.osterman@lumotive.com>
+Date: Wed, 7 Feb 2024 16:09:26 -0800
+Subject: [PATCH] Enable pull-ups for pcb rev gpios
+
+---
+ .../boot/dts/freescale/imx8qm-mek-m30.dts     | 28 +++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts  |  9 ------
+ 2 files changed, 28 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek-m30.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek-m30.dts
+index b1bd9eeeddfd..3e44f0585b20 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek-m30.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek-m30.dts
+@@ -3,6 +3,34 @@
+ 
+ #include "imx8qm-mek.dts"
+ 
++/ {
++	// Ensure disabled to not conflict with pcb_rev
++	modem-reset {
++		status = "disabled";
++	};
++
++	// Ensure disabled to not conflict with pcb_rev
++	cbtl04gp {
++		status = "disabled";
++	};
++
++	pcb_rev {
++		compatible = "fsl,imx8qm-iomuxc";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pcb_rev>;
++		status = "okay";
++
++		pinctrl_pcb_rev: pcb_revgrp {
++			fsl,pins = <
++				IMX8QM_QSPI1A_SCLK_LSIO_GPIO4_IO21			0x00000020	// REV3
++				IMX8QM_QSPI1A_SS0_B_LSIO_GPIO4_IO19			0x00000020	// REV2
++				IMX8QM_QSPI1A_SS1_B_LSIO_GPIO4_IO20			0x00000020	// REV1
++				IMX8QM_QSPI1A_DQS_LSIO_GPIO4_IO22			0x00000020	// REV0
++			>;
++		};
++	};
++};
++
+ &isi_0 {
+ 	status = "okay";
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index b522b756e13f..c38834e8c5a7 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -158,7 +158,6 @@ linux,cma {
+ 			alloc-ranges = <0 0xc0000000 0 0x3c000000>;
+ 			linux,cma-default;
+ 		};
+-
+ 	};
+ 
+ 	epdev_on: fixedregulator@100 {
+@@ -415,7 +414,6 @@ rsc_table1: rsc_table1@901ff000 {
+ 		};
+ 	};
+ 
+-
+ 	pps {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_pps>;
+@@ -489,7 +487,6 @@ &dc0_prg1 {
+ 
+ &dc0_prg2 {
+ 	status = "okay";
+-
+ };
+ 
+ &dc0_prg3 {
+@@ -1384,7 +1381,6 @@ max9286_1_ep: endpoint {
+ 			};
+ 		};
+ 	};
+-
+ };
+ 
+ &iomuxc {
+@@ -1437,10 +1433,6 @@ IMX8QM_FLEXCAN1_TX_LSIO_GPIO4_IO00			0x00000041
+ 			IMX8QM_FLEXCAN2_TX_LSIO_GPIO4_IO02			0x00000041
+ 			IMX8QM_FLEXCAN2_RX_LSIO_GPIO4_IO01			0x00000041
+ 			IMX8QM_FLEXCAN2_RX_LSIO_GPIO4_IO01			0x00000041
+-			IMX8QM_QSPI1A_SS0_B_LSIO_GPIO4_IO19			0x00000041
+-			IMX8QM_QSPI1A_SS1_B_LSIO_GPIO4_IO20			0x00000041
+-			IMX8QM_QSPI1A_SCLK_LSIO_GPIO4_IO21			0x00000041
+-			IMX8QM_QSPI1A_DQS_LSIO_GPIO4_IO22			0x00000041
+ 			IMX8QM_QSPI1A_DATA3_LSIO_GPIO4_IO23			0x00000041
+ 			IMX8QM_QSPI1A_DATA2_LSIO_GPIO4_IO24			0x00000041
+ 			IMX8QM_QSPI1A_DATA0_LSIO_GPIO4_IO26			0x00000041
+@@ -1868,7 +1860,6 @@ pinctrl_pps: pps1 {
+ 			IMX8QM_ENET1_RGMII_TXD2_LSIO_GPIO6_IO14		  0x06000041	// PPS_IN_BUF
+ 		>;
+ 	};
+-
+ };
+ 
+ &thermal_zones {

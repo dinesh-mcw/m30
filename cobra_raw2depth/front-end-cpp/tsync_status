@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if pidof ptp4l > /dev/null ; then
+    /usr/sbin/pmc -u -b 0 "get time_status_np" | egrep 'gmPresent|master_offset' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]][[:space:]]*/:/'
+fi
+
+TSYNC_FILE=/home/root/cobra/tsync.conf      # $HOME is empty in a script run by systemd
+if [ -f $TSYNC_FILE ] ; then
+    if grep frontend_options $TSYNC_FILE | grep pps >> /dev/null ; then
+        echo "pps1_assert:`cat /sys/class/pps/pps1/assert`"
+    fi
+fi
+
+/usr/bin/timedatectl | grep 'System clock synchronized:' | sed 's/.*: /system_clock_synced:/'

@@ -1,0 +1,8 @@
+[Unit]
+Description=Mark good boot by resetting u-boot counters
+
+[Service]
+ExecStart=@SCRIPTDIR@/markgoodboot.sh
+
+[Install]
+WantedBy=multi-user.target

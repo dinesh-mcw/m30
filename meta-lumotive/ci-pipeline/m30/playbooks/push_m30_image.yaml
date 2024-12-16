@@ -1,0 +1,69 @@
+---
+- name: Prepare, Package, and Upload M30 Images Using Shell Scripts
+  hosts: build_hosts
+  vars:
+    output_dir: "{{ build_dir }}/output"
+    artifacts_dir: "{{ output_dir }}/build_artifacts"
+    image_dir: "{{ build_dir }}/build/tmp/deploy/images/imx8qmmek/"
+    bitbucket_repo_slug: "{{ lookup('env', 'BITBUCKET_REPO_SLUG') }}"
+    artifactory_repo_url: "http://artifactory.internal.lumotive.com/artifactory/{{ artifactory_build_sw_team_repo }}/{{ bitbucket_repo_slug }}"
+    artifactory_user: "{{ lookup('env', 'ARTIFACTORY_USER') }}"
+    artifactory_api_key: "{{ lookup('env', 'ARTIFACTORY_API_KEY') }}"
+    artifactory_build_sw_team_repo : "{{ lookup('env', 'ARTIFACTORY_BUILD_SW_TEAM_REPO') }}"
+    bitbucket_tag: "{{ lookup('env', 'BITBUCKET_TAG') }}"
+    bitbucket_branch: "{{ lookup('env', 'BITBUCKET_BRANCH') }}"
+    tar_name: "{{ output_dir }}/cobra-{{ bitbucket_tag }}.tgz"
+    your_name: "devops"
+    key_dir: "{{ build_dir }}/sources/meta-lumotive/recipes-core/images/m30-core-swu"
+    swupdate_dir: "{{ build_dir }}/sources/meta-lumotive/recipes-support/swupdate/swupdate"
+
+  tasks:
+    - name: Ensure artifact directories exist
+      ansible.builtin.file:
+        path: "{{ artifacts_dir }}"
+        state: directory
+
+    - name: Create a manifest file from the m30 image manifest
+      shell: |
+        ../scripts/create_manifest.sh "{{ image_dir }}" "{{ artifacts_dir }}"
+      args:
+        executable: /bin/bash
+
+    - name: Collect specified artifacts and package unit tests and build artifacts
+      shell: |
+        ../scripts/collect_and_package_artifacts.sh "{{ image_dir }}" "{{ artifacts_dir }}" "{{ output_dir }}" "{{ tar_name }}" "{{ build_dir }}"
+      args:
+        executable: /bin/bash
+
+    - name: Set variable for repo init to BITBUCKET_TAG with refs/tags format
+      set_fact:
+        repo_branch_or_tag: "refs/tags/{{ lookup('env','BITBUCKET_TAG') }}"
+      when: lookup('env','BITBUCKET_TAG') | default('') | length > 0
+
+    - name: Set variable for repo init to BITBUCKET_BRANCH if BITBUCKET_TAG is not defined
+      set_fact:
+        repo_branch_or_tag: "{{ bitbucket_branch }}"
+      when: lookup('env','BITBUCKET_TAG') | default('') | length == 0
+
+    - name: Upload to Artifactory and create a manifest for System test to consume
+      shell: |
+        ../scripts/upload_to_artifactory.sh "{{ artifactory_user }}" "{{ artifactory_api_key }}" "{{ artifactory_repo_url }}" "{{ repo_branch_or_tag }}" "{{ tar_name }}" "{{ output_dir }}"
+      args:
+        executable: /bin/bash
+
+    - name: Check if downloads cache exists in the home directory
+      ansible.builtin.stat:
+        path: "{{ lookup('env', 'HOME') }}/downloads"
+      register: downloads_cache
+
+    - name: If downloads cache does not exist, create a downloads cache using the build directory
+      ansible.builtin.copy:
+        src: "{{ build_dir }}/downloads"
+        dest: "{{ lookup('env', 'HOME') }}"
+      when: downloads_cache.stat.exists == False
+
+    - name: Shred the SSH keys used for SWupdate Image signing
+      shell: |
+        shred -u "{{ swupdate_dir }}/swupdate.pub.pem" "{{ key_dir }}/swupdate.priv.pem" "{{ key_dir }}/swupdate.priv.pem.pass"
+      args:
+        executable: /bin/bash

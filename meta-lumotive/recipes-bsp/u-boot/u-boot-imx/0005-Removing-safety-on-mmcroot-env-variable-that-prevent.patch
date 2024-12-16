@@ -1,0 +1,30 @@
+From 124dfd23460ac9eb3ae4963372b1c0f7591d3b15 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Wed, 4 Jan 2023 16:24:54 -0700
+Subject: [PATCH 05/10] Removing safety on mmcroot env variable that prevents
+ us from setting it ourselves!
+
+---
+ board/freescale/common/mmc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/board/freescale/common/mmc.c b/board/freescale/common/mmc.c
+index ab1652d697..04635092ee 100644
+--- a/board/freescale/common/mmc.c
++++ b/board/freescale/common/mmc.c
+@@ -44,7 +44,11 @@ void board_late_mmc_env_init(void)
+ 	/* Set mmcblk env */
+ 	sprintf(mmcblk, "/dev/mmcblk%dp2 rootwait rw",
+ 		mmc_map_to_kernel_blk(dev_no));
+-	env_set("mmcroot", mmcblk);
++
++	// Looks like someone didn't trust us and ignores/overrites/blasts both default and persistently stored changes to mmcroot!
++	// Looks like that safety shot us in the foot. Turning this off!
++
++	// env_set("mmcroot", mmcblk);
+ 
+ 	sprintf(cmd, "mmc dev %d", dev_no);
+ 	run_command(cmd, 0);
+-- 
+2.25.1
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <default sync-j="2"/>
+
+  <remote fetch="https://github.com/sbabic" name="swupdate"/>
+  <remote fetch="ssh://git@bitbucket.org/lumotive/meta-lumotive.git" name="lumotive"/>
+
+  <project name="meta-swupdate" path="sources/meta-swupdate" remote="swupdate" revision="4b99b93b4225723cf9ff3a29abb4bd7811ce071c" upstream="master"/>
+  <project name="meta-lumotive" path="sources/meta-lumotive" remote="lumotive" revision="master">
+    <linkfile src="conf/bblayers.conf" dest="build/conf/bblayers.conf"/>
+    <linkfile src="conf/local.conf" dest="build/conf/local.conf"/>
+  </project>
+
+</manifest>

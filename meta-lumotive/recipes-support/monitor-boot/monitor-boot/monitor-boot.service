@@ -1,0 +1,9 @@
+[Unit]
+Description=system boot time monitor
+
+[Service]
+ExecStart=/usr/bin/python3 @SCRIPTDIR@/monitor_boot.py
+ExecStopPost=/sbin/bootchartd stop
+
+[Install]
+WantedBy=multi-user.target

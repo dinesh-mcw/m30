@@ -1,0 +1,111 @@
+image: docker:latest
+clone:
+  lfs: true
+definitions:
+  steps:
+    - &run-on-docker
+        runs-on:
+          - 'self.hosted'
+          - 'linux'
+          - 'runner.docker'
+    - &common-variables
+        variables:
+          SOURCE_CODE_DIR: $(pwd)
+pipelines:
+  pull-requests:
+    '**':
+      - parallel:
+          - step:
+              name: Run Git Secrets Scan
+              script:
+                - pipe: atlassian/git-secrets-scan:1.4.0
+              <<: *run-on-docker
+              caches:
+                - docker
+          - step:
+              name: Spell Check
+              script:
+                - pipe: atlassian/crate-ci-typos-check:0.1.0
+                  variables:
+                    VERSION: '1.16.23'
+              <<: *run-on-docker
+              caches:
+                - docker
+          - step:
+              name: Run Unit Tests
+              size: 4x
+              script:
+                - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+                - pipe: docker://lumotive/devops-tasks:raw2depth_unittests
+                  <<: *common-variables
+              <<: *run-on-docker
+              caches:
+                - docker
+          - step:
+              name: Run C/C++ Clang Tidy Static Analysis Checks
+              size: 4x
+              script:
+                - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+                - pipe: docker://lumotive/devops-tasks:clang_tidy_check
+                  <<: *common-variables
+              <<: *run-on-docker
+              caches:
+                - docker
+          - step:
+              name: Run LLVM Code Coverage Analysis
+              size: 4x
+              script:
+                - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+                - pipe: docker://lumotive/devops-tasks:raw2depth_code_coverage
+                  <<: *common-variables
+              artifacts:
+                - build/raw-to-depth-cpp-tests/lcov_report_output.txt
+              <<: *run-on-docker
+              caches:
+                - docker
+      - step:
+          name: Code Coverage Report Generation
+          script:
+            - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+            - pipe: docker://lumotive/devops-tasks:coverage_report
+              variables:
+                BITBUCKET_WORKSPACE: $BITBUCKET_WORKSPACE
+                BITBUCKET_REPO_SLUG: $BITBUCKET_REPO_SLUG
+                BITBUCKET_COMMIT: $BITBUCKET_COMMIT
+                COVERAGE_REPORT_APP_USERNAME: $COVERAGE_REPORT_APP_USERNAME
+                COVERAGE_REPORT_APP_PASSWORD: $COVERAGE_REPORT_APP_PASSWORD
+                <<: *common-variables
+          <<: *run-on-docker
+          caches:
+            - docker
+  branches:
+    master:
+    - step:
+        name: Trigger sync-source pipeline for Cobra Raw2Depth for HM30
+        script:
+          - pipe: atlassian/trigger-pipeline:5.4.1
+            variables:
+              ACCOUNT: 'lumotive'
+              REPOSITORY: 'cobra_raw2depth_hm30'
+              BITBUCKET_USERNAME: $BITBUCKET_USERNAME_SYNC_SOURCE_CI
+              BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD_SYNC_SOURCE_CI
+              REF_TYPE: 'branch'
+              REF_NAME: 'master'
+              CUSTOM_PIPELINE_NAME: 'sync-source'
+              DEBUG: 'true'
+        <<: *run-on-docker
+        caches:
+          - docker
+    - step:
+        name: Generate Code Level Documentation using Doxygen
+        script:
+          - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+          - pipe: docker://lumotive/devops-tasks:doxygen_doc_gen
+            variables:
+              ARTIFACTORY_USER: $ARTIFACTORY_USER
+              ARTIFACTORY_API_KEY: $ARTIFACTORY_API_KEY
+              ARTIFACTORY_URL: $ARTIFACTORY_URL
+              ARTIFACTORY_SW_TEAM_REPO: $ARTIFACTORY_SW_TEAM_REPO
+        <<: *run-on-docker
+        caches:
+          - docker

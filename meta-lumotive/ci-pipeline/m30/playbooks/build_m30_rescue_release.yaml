@@ -1,0 +1,21 @@
+- name: Build M30 Rescue Image from scratch
+  hosts: build_hosts
+  tasks:
+    - name: Build M30 Rescue Image
+      shell: |
+        if [ "$BITBUCKET_BRANCH" == "master" ] && [ -z "$BITBUCKET_TAG" ]; then
+          export BITBUCKET_TAG="LATEST_TAG"
+        fi
+        export BUILD_VERSION=$BITBUCKET_TAG
+        export BUILD_NUMBER=$BITBUCKET_BUILD_NUMBER
+        export BUILD_OS_REV=$BITBUCKET_COMMIT
+        BUILD_MANIFEST="imx-5.15.52-cobra.xml"
+        MANIFEST_SHA=$(sha256sum "$BITBUCKET_CLONE_DIR/manifests/$BUILD_MANIFEST" | awk '{print $1}')
+        export MANIFEST_SHA
+        export BB_ENV_PASSTHROUGH_ADDITIONS="OS_SHA BUILD_VERSION BUILD_NUMBER BUILD_MANIFEST MANIFEST_SHA BUILD_OS_REV"
+        cd {{ build_dir }}
+        source sources/poky/oe-init-build-env build
+        bitbake -k rescue-image > build_rescue.log 2>&1 &
+      args:
+        executable: /bin/bash
+      async: 10800

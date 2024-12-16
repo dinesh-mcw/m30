@@ -1,0 +1,29 @@
+[project]
+name = "cobra_raw2depth"
+version = "0.0"
+description = "Cobra raw to depth pipeline"
+
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "numpy",
+    "scipy",
+    "scikit-image",
+]
+
+
+[build-system]
+requires = [
+    "setuptools>=58.3.0",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ['cobra_raw2depth*']
+
+[tool.setuptools.package-data]
+"*" = ["*.py", "*.npy", ]

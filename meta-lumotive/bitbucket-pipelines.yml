@@ -1,0 +1,136 @@
+clone:
+  lfs: true
+pipelines:
+  custom:
+      engineering-build:
+        - variables:
+          - name: cobra_raw2depth
+            default: "master"
+            description: "Please specify a branch, a tag or a commit SHA (in the format commit_sha,branch)"
+          - name: cobra_system_control
+            default: "develop"
+            description: "Please specify a branch, a tag or a commit SHA (in the format commit_sha,branch)"
+          - name: cobra_lidar_api
+            default: "master"
+            description: "Please specify a branch, a tag or a commit SHA (in the format commit_sha,branch)"
+          - name: meta_lumotive
+            default: "master"
+            description: "Please specify a branch, a tag or a commit SHA (in the format commit_sha,branch)"
+        
+        - step:
+            name: Download SWupdate SSH Keys from Vault
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+                - vault --version
+                - export VAULT_ADDR='http://vault.internal.lumotive.com:8200'
+                - export ROLE_ID=$VAULT_M30_SSH_ROLE_ID
+                - export SECRET_ID=$VAULT_M30_SSH_SECRET_ID
+                - export VAULT_TOKEN=$(vault write -field=token auth/approle/login role_id=$ROLE_ID secret_id=$SECRET_ID)
+                - SSH_PRIVATE_KEY=$(vault kv get -field=m30_private_key kv/ssh_keys/m30_ssh_keys)
+                - SSH_PRIVATE_KEY_PASSPHRASE=$(vault kv get -field=m30_private_key_pass kv/ssh_keys/m30_ssh_keys)
+                - SSH_PUBLIC_KEY=$(vault kv get -field=m30_public_key kv/ssh_keys/m30_ssh_keys)
+                - echo "$SSH_PRIVATE_KEY_PASSPHRASE" | base64 -d > ~/.ssh/swupdate.priv.pem.pass
+                - echo "$SSH_PRIVATE_KEY" > ~/.ssh/swupdate.priv.pem && echo "$SSH_PUBLIC_KEY" > ~/.ssh/swupdate.pub.pem
+                - chmod 700 ~/.ssh/swupdate.priv.pem && chmod 700 ~/.ssh/swupdate.pub.pem && chmod 700 ~/.ssh/swupdate.priv.pem.pass
+                - unset VAULT_TOKEN && unset VAULT_ADDR && unset VAULT_LONG_TERM_TOKEN && unset SSH_PRIVATE_KEY_PASSPHRASE && unset SSH_PRIVATE_KEY && unset SSH_PUBLIC_KEY && unset ROLE_ID && unset SECRET_ID
+
+        - step:
+            name: Check/Download CI Pipeline folder
+            runs-on:
+              - self.hosted
+              - linux
+              - runner.docker
+            script:
+              - if [ -d "./ci-pipeline/m30/" ]; then echo "CI Pipeline folder exists continuing to next step"; exit 0; else echo "CI Pipeline folder does not exist, Downloading and passing as artifact to next step"; fi
+              - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+              - pipe: docker://lumotive/devops-tasks:check_ci_pipeline_folder
+                variables:
+                  SSH_PRIVATE_KEY_PIPELINE: $SSH_PRIVATE_KEY_PIPELINE
+                  SOURCE_CODE_DIR: $(pwd)
+            artifacts:
+            - ci-pipeline/m30/**
+            - ci-pipeline/hosts
+        - step:
+            name: Check if Build tools are installed, and Build Yaml Configuration exists
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+            - chmod +x ./ci-pipeline/m30/scripts/check_tools.sh
+            - bash ./ci-pipeline/m30/scripts/check_tools.sh
+        - step:
+            name: Prepare the Build directories and environment for Engineering Builds
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+            - export ANSIBLE_STDOUT_CALLBACK=yaml
+            - ansible-playbook -i ./ci-pipeline/hosts ./ci-pipeline/m30/playbooks/prepare_engineering_build.yaml --verbose
+        - step:
+            name: Build the M30 Rescue Image
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+            - ansible-playbook -i ./ci-pipeline/hosts ./ci-pipeline/m30/playbooks/build_m30_rescue_release.yaml --verbose
+            - bash ./ci-pipeline/m30/scripts/check_build_status.sh ~/bitbucket_pipeline_builds/m30_build/build/build_rescue.log
+        - step:
+            name: Build M30 Core Image
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+            - ansible-playbook -i ./ci-pipeline/hosts ./ci-pipeline/m30/playbooks/build_m30_core_release.yaml --verbose
+            - bash ./ci-pipeline/m30/scripts/check_build_status.sh ~/bitbucket_pipeline_builds/m30_build/build/build_core.log
+        - step:
+            name: Build M30 Software Update Image
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+            - ansible-playbook -i ./ci-pipeline/hosts ./ci-pipeline/m30/playbooks/build_m30_swu_release.yaml --verbose
+            - bash ./ci-pipeline/m30/scripts/check_build_status.sh ~/bitbucket_pipeline_builds/m30_build/build/build_swu.log
+        - step:
+            name: Build M30 factory Image
+            runs-on:
+            - self.hosted
+            - linux.shell
+            - test.runner
+            script:
+            - ansible-playbook -i ./ci-pipeline/hosts ./ci-pipeline/m30/playbooks/build_m30_factory_image.yaml --verbose
+            - bash ./ci-pipeline/m30/scripts/check_build_status.sh ~/bitbucket_pipeline_builds/m30_build/build/build_factory.log
+        - step:
+            name: Prepare, Package and Upload M30 Images
+            runs-on:
+            - self.hosted
+            - linux.shell
+            - test.runner
+            script:
+            - export ANSIBLE_STDOUT_CALLBACK=yaml
+            - chmod +x ./ci-pipeline/m30/scripts/create_manifest.sh
+            - chmod +x ./ci-pipeline/m30/scripts/collect_and_package_artifacts.sh
+            - chmod +x ./ci-pipeline/m30/scripts/upload_to_artifactory.sh
+            - ansible-playbook -i ./ci-pipeline/hosts ./ci-pipeline/m30/playbooks/push_m30_image.yaml --verbose
+
+        - step:
+            name: Shred and Delete the SWupdate SSH Keys
+            runs-on:
+              - self.hosted
+              - linux.shell
+              - test.runner
+            script:
+                - shred -u -v ~/.ssh/swupdate.priv.pem && shred -u ~/.ssh/swupdate.pub.pem && shred -u ~/.ssh/swupdate.priv.pem.pass
+  pull-requests:
+      '**':
+        import: shared_m30_pipeline:master:m30-common-pr-checks
+  tags:
+      'R*.*.*':
+        import: shared_m30_pipeline:master:m30-release-build

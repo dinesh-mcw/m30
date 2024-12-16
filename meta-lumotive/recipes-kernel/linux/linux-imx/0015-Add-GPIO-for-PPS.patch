@@ -1,0 +1,95 @@
+From 04cec07f98348c856daf3713badb371ad1b70f41 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Fri, 1 Sep 2023 13:57:12 -0600
+Subject: [PATCH 2/3] Add GPIO for PPS
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 23 ++++++++++++++++++--
+ arch/arm64/configs/imx_v8_defconfig          |  2 ++
+ 2 files changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index 70a14e08e404..f50519954a86 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -414,6 +414,16 @@ rsc_table1: rsc_table1@901ff000 {
+ 			no-map;
+ 		};
+ 	};
++
++	pps {
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_pps>;
++        gpios = <&lsio_gpio1 18 GPIO_ACTIVE_HIGH>;
++        assert-rising-edge;
++	    compatible = "pps-gpio";
++		status = "okay";
++	};
++
+ };
+ 
+ &adc0 {
+@@ -1388,7 +1398,7 @@ &iomuxc {
+ 	pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+ 			IMX8QM_ENET1_RGMII_RXC_LSIO_GPIO6_IO16			0x00000041	// STATUS_LED
+-                        IMX8QM_ENET1_RGMII_RX_CTL_LSIO_GPIO6_IO17               0x00000041      // DATA_LED
++			IMX8QM_ENET1_RGMII_RX_CTL_LSIO_GPIO6_IO17		0x00000041	// DATA_LED
+ 			IMX8QM_ENET1_RGMII_RXD1_LSIO_GPIO6_IO19			0x00000041	// DBG_LED2
+ 			IMX8QM_ENET1_RGMII_RXD2_LSIO_GPIO6_IO20			0x00000041	// DBG_LED1
+ 			IMX8QM_ENET1_RGMII_RXD3_LSIO_GPIO6_IO21			0x00000041	// DBG_LED0
+@@ -1400,7 +1410,7 @@ IMX8QM_SPI3_SCK_LSIO_GPIO2_IO17				0x00000041	// RX_24V_EN
+ 			IMX8QM_SPI3_SDO_LSIO_GPIO2_IO18				0x00000041	// RX_18V_EN
+ 			IMX8QM_SPI3_SDI_LSIO_GPIO2_IO19				0x00000041	// RX_3.3V_EN
+ 			IMX8QM_SPI3_CS0_LSIO_GPIO2_IO20				0x00000041	// LASER_PWR_DN
+-			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
++//			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
+ 			IMX8QM_MIPI_DSI0_GPIO0_01_LSIO_GPIO1_IO19		0x00000041	// SELECT_I2C_GPIO
+ 			IMX8QM_USDHC2_CLK_LSIO_GPIO5_IO24			0x00000041	// ERROR_GPIO0
+ 			IMX8QM_USDHC2_CMD_LSIO_GPIO5_IO25			0x00000041	// INTERRUPT_GPIO1
+@@ -1409,6 +1419,7 @@ IMX8QM_USDHC2_DATA1_LSIO_GPIO5_IO27			0x00000041	// RX_GPIO3
+ 			IMX8QM_USDHC2_DATA2_LSIO_GPIO5_IO28			0x00000041	// RX_GPIO4
+ 			IMX8QM_USDHC2_DATA3_LSIO_GPIO5_IO29			0x00000041	// RX_GPIO5
+ 			IMX8QM_SPDIF0_TX_LSIO_GPIO2_IO15			0x00000041	// PGOOD_5.0
++			IMX8QM_ENET0_REFCLK_125M_25M_LSIO_GPIO4_IO15	0x00000041	// ENET0_REFCLK
+ /*
+ 			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
+ 			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
+@@ -1502,6 +1513,7 @@ IMX8QM_ENET0_RGMII_RXD0_CONN_ENET0_RGMII_RXD0		0x06000020
+ 			IMX8QM_ENET0_RGMII_RXD1_CONN_ENET0_RGMII_RXD1		0x06000020
+ 			IMX8QM_ENET0_RGMII_RXD2_CONN_ENET0_RGMII_RXD2		0x06000020
+ 			IMX8QM_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3		0x06000020
++/*            IMX8QM_ENET0_REFCLK_125M_25M_CONN_ENET0_PPS     0x06000020 */
+ 		>;
+ 	};
+ 
+@@ -1848,6 +1860,13 @@ IMX8QM_MIPI_DSI1_GPIO0_01_LSIO_GPIO1_IO23         0x00000020
+ 		>;
+ 	};
+ 
++	pinctrl_pps: pps1 {
++		fsl,pins = <
++			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
++		>;
++	};
++
++
+ };
+ 
+ &thermal_zones {
+diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
+index a756f5370193..4173ebbf439d 100644
+--- a/arch/arm64/configs/imx_v8_defconfig
++++ b/arch/arm64/configs/imx_v8_defconfig
+@@ -424,6 +424,8 @@ CONFIG_SPI_SLAVE=y
+ CONFIG_SPI_SLAVE_TIME=y
+ CONFIG_SPI_SLAVE_SYSTEM_CONTROL=y
+ CONFIG_SPMI=y
++CONFIG_PPS=y
++CONFIG_PPS_CLIENT_GPIO=y
+ CONFIG_PINCTRL_SINGLE=y
+ CONFIG_PINCTRL_MAX77620=y
+ CONFIG_PINCTRL_IMX8MM=y
+-- 
+2.25.1
+

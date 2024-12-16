@@ -1,0 +1,15 @@
+[Unit]
+Description=PTP hardware clock to system clock synchronizing service
+
+# Needs networking
+Requires=network
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/phc2sys -s eth0 -w -l 5
+Restart=always
+RestartSec=5s
+
+# This the default mode the Jetson boots in
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+# Skip downloaded sources
+/downloads
+/builds/downloads
+
+# Noise
+.vscode/
+.DS_Store

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+OPTIONS="-4 -P -H -i eth0 -s --logging_level=5"
+TSYNC_FILE=/home/root/cobra/tsync.conf      # $HOME is empty in a script run by systemd
+
+if [ -f $TSYNC_FILE ] ; then
+    CONF_OPTIONS=`grep ptp4l_options $TSYNC_FILE | sed 's/^[[:alnum:]_]*=//'`
+    if [ "x$CONF_OPTIONS" != "x" ] ; then
+        OPTIONS=$CONF_OPTIONS
+    fi
+fi
+
+/usr/sbin/ptp4l $OPTIONS

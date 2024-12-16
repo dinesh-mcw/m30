@@ -1,0 +1,42 @@
+From 11fe0e9f050bc316977af9470dae2f1582ee0a65 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Mon, 27 Feb 2023 11:47:32 -0700
+Subject: [PATCH] Get boot files from boot directory
+
+---
+ board/freescale/imx8qm_mek/imx8qm_mek.c | 4 ++--
+ include/configs/imx8qm_mek.h            | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/freescale/imx8qm_mek/imx8qm_mek.c b/board/freescale/imx8qm_mek/imx8qm_mek.c
+index c06bc78ef1..8c16447223 100644
+--- a/board/freescale/imx8qm_mek/imx8qm_mek.c
++++ b/board/freescale/imx8qm_mek/imx8qm_mek.c
+@@ -491,9 +491,9 @@ int board_late_init(void)
+ #else
+ 		m4_booted = m4_parts_booted();
+ 		if (m4_booted)
+-			env_set("fdt_file", "imx8qm-mek-rpmsg.dtb");
++			env_set("fdt_file", "boot/imx8qm-mek-rpmsg.dtb");
+ 		else
+-			env_set("fdt_file", "imx8qm-mek.dtb");
++			env_set("fdt_file", "boot/imx8qm-mek.dtb");
+ #endif
+ 	}
+ 
+diff --git a/include/configs/imx8qm_mek.h b/include/configs/imx8qm_mek.h
+index 25e734933d..d4b95d6090 100644
+--- a/include/configs/imx8qm_mek.h
++++ b/include/configs/imx8qm_mek.h
+@@ -171,7 +171,7 @@
+ 	JAILHOUSE_ENV\
+ 	AHAB_ENV \
+ 	"script=boot.scr\0" \
+-	"image=Image\0" \
++	"image=boot/Image\0" \
+ 	SPLASH_IMAGE_ADDR \
+ 	CONFIG_CONSOLE \
+ 	FDT_ADDR \
+-- 
+2.25.1
+

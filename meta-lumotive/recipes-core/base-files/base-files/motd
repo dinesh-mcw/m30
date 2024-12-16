@@ -1,0 +1,10 @@
+Available commands:
+v | versions  : Show system and software versions
+t | temps     : Show system temperature zones
+s | stopwatch : Run a simple stopwatch timer
+    sys       : Show systemctl units
+    net       : Show networkctl units
+    log       : Show journald log
+    mess      : Show syslog
+    tcp       : Show TCP connections
+    udp       : Show UDP connections

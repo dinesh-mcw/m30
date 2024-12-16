@@ -1,0 +1,25 @@
+From 131f6754db709003573397928ab2cc5e8ffe482b Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Wed, 15 Feb 2023 09:47:30 -0700
+Subject: [PATCH 08/10] Adding automatic reboot on boot failure.
+
+---
+ include/configs/imx8qm_mek.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/imx8qm_mek.h b/include/configs/imx8qm_mek.h
+index 9821f9fd93..25e734933d 100644
+--- a/include/configs/imx8qm_mek.h
++++ b/include/configs/imx8qm_mek.h
+@@ -226,7 +226,7 @@
+ 		"root=/dev/nfs " \
+ 		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp " \
+ 		"cpufreq.default_governor=SCHEDUTIL\0" \
+-	"netboot=echo Netboot disabled.;\0" \
++	"netboot=echo Netboot disabled.;reset;\0" \
+ 	"bootcmd2=mmc dev ${mmcdev}; if mmc rescan; then "\
+ 		"if run loadbootscript; then " \
+ 			"run bootscript; " \
+-- 
+2.25.1
+

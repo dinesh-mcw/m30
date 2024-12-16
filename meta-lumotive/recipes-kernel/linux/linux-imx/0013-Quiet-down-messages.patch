@@ -1,0 +1,155 @@
+From da46cfa65e22d6cf07d72c87f0a9d80b0985751a Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Tue, 13 Jun 2023 13:16:11 -0600
+Subject: [PATCH 2/2] Quiet down messages
+
+---
+ drivers/media/i2c/m30.c                    | 11 -----------
+ drivers/staging/media/imx/imx8-isi-hw.c    |  3 ---
+ drivers/staging/media/imx/imx8-mipi-csi2.c |  8 ++------
+ 3 files changed, 2 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/media/i2c/m30.c b/drivers/media/i2c/m30.c
+index 046983042e21..2632f8bc5efa 100644
+--- a/drivers/media/i2c/m30.c
++++ b/drivers/media/i2c/m30.c
+@@ -159,7 +159,6 @@ static int m30_s_power(struct v4l2_subdev *sd, int on)
+ 	struct m30_dev *sensor = to_m30_dev(sd);
+ 	int ret = 0;
+ 
+-	printk("%s\n", __func__);
+ 	mutex_lock(&sensor->lock);
+ 
+ 	/* Update the power count. */
+@@ -179,7 +178,6 @@ static int m30_find_nearest_frame_interval(struct m30_dev *sensor,
+ 	int best_fps = -1;
+ 	int i;
+ 
+-	printk("%s\n", __func__);
+ 
+ 	for (i = 0; i < M30_NUM_FRAME_RATES; i++) {
+ 		u32 fps_i = m30_frame_rates[i];
+@@ -205,7 +203,6 @@ static int m30_get_fmt(struct v4l2_subdev *sd,
+ 	struct m30_dev *sensor = to_m30_dev(sd);
+ 	struct v4l2_mbus_framefmt *fmt;
+ 
+-	printk("%s\n", __func__);
+ 	if (format->pad != 0)
+ 		return -EINVAL;
+ 
+@@ -232,7 +229,6 @@ static int m30_try_fmt_internal(struct v4l2_subdev *sd,
+ 	struct m30_dev *sensor = to_m30_dev(sd);
+ 	const struct m30_mode_info *mode;
+ 
+-	printk("%s\n", __func__);
+ 	mode = m30_find_mode(sensor, fmt->width, fmt->height, true);
+ 	if (!mode)
+ 		return -EINVAL;
+@@ -261,7 +257,6 @@ static int m30_set_fmt(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
+ 	int ret;
+ 
+-	printk("%s\n", __func__);
+ 	if (format->pad != 0)
+ 		return -EINVAL;
+ 
+@@ -353,7 +348,6 @@ static int m30_g_frame_interval(struct v4l2_subdev *sd,
+ {
+ 	struct m30_dev *sensor = to_m30_dev(sd);
+ 
+-	printk("%s\n", __func__);
+ 	mutex_lock(&sensor->lock);
+ 	fi->interval = sensor->frame_interval;
+ 	mutex_unlock(&sensor->lock);
+@@ -368,7 +362,6 @@ static int m30_s_frame_interval(struct v4l2_subdev *sd,
+ 	const struct m30_mode_info *mode;
+ 	int frame_rate, ret = 0;
+ 
+-	printk("%s\n", __func__);
+ 	if (fi->pad != 0)
+ 		return -EINVAL;
+ 
+@@ -403,7 +396,6 @@ static int m30_enum_mbus_code(struct v4l2_subdev *sd,
+ 			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	printk("%s\n", __func__);
+ 	if (code->pad != 0)
+ 		return -EINVAL;
+ 	if (code->index > 0)
+@@ -418,7 +410,6 @@ static int m30_s_stream(struct v4l2_subdev *sd, int enable)
+ 	struct m30_dev *sensor = to_m30_dev(sd);
+ 	struct i2c_client *client = sensor->i2c_client;
+ 	int ret = 0;
+-	printk("%s\n", __func__);
+ 
+ 	mutex_lock(&sensor->lock);
+ 
+@@ -491,7 +482,6 @@ static int m30_probe(struct i2c_client *client)
+ 	struct v4l2_mbus_framefmt *fmt;
+ 	int ret;
+ 
+-	printk("%s\n", __func__);
+ 	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+ 	if (!sensor)
+ 		return -ENOMEM;
+@@ -565,7 +555,6 @@ static int m30_remove(struct i2c_client *client)
+ 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+ 	struct m30_dev *sensor = to_m30_dev(sd);
+ 
+-	printk("%s\n", __func__);
+ 	v4l2_async_unregister_subdev(&sensor->sd);
+ 	media_entity_cleanup(&sensor->sd.entity);
+ 	mutex_destroy(&sensor->lock);
+diff --git a/drivers/staging/media/imx/imx8-isi-hw.c b/drivers/staging/media/imx/imx8-isi-hw.c
+index 193ff5c5fd33..3b9a37a06462 100644
+--- a/drivers/staging/media/imx/imx8-isi-hw.c
++++ b/drivers/staging/media/imx/imx8-isi-hw.c
+@@ -356,9 +356,6 @@ void mxc_isi_channel_set_csc(struct mxc_isi_dev *mxc_isi,
+ 		val |= CHNL_IMG_CTRL_CSC_BYPASS_ENABLE;
+ 	}
+ 
+-	printk_pixelformat("input fmt", src_fmt->fourcc);
+-	printk_pixelformat("output fmt", dst_fmt->fourcc);
+-
+ 	if (mxc_isi->cscen) {
+ 		writel(coeffs[csc][0], mxc_isi->regs + CHNL_CSC_COEFF0);
+ 		writel(coeffs[csc][1], mxc_isi->regs + CHNL_CSC_COEFF1);
+diff --git a/drivers/staging/media/imx/imx8-mipi-csi2.c b/drivers/staging/media/imx/imx8-mipi-csi2.c
+index 901af57adff8..4c77ff58dd4a 100644
+--- a/drivers/staging/media/imx/imx8-mipi-csi2.c
++++ b/drivers/staging/media/imx/imx8-mipi-csi2.c
+@@ -387,7 +387,6 @@ static int calc_hs_settle(struct mxc_mipi_csi2_dev *csi2dev, u32 dphy_clk)
+ 	hs_settle_max = 145 + 10 * 1000 / dphy_clk;
+ 	hs_settle = (hs_settle_min + hs_settle_max) >> 1;
+ 	rxhs_settle = hs_settle / (1000 / esc_rate) - 1;
+-	dev_info(dev, "esc_rate=%u,hs_settle=%u,%u,%u,rxhs_settle=%u\n", esc_rate, hs_settle_min, hs_settle, hs_settle_max, rxhs_settle);
+ 	return rxhs_settle;
+ }
+ 
+@@ -435,10 +434,10 @@ static void mxc_mipi_csi2_reg_dump(struct mxc_mipi_csi2_dev *csi2dev)
+ 	};
+ 	u32 i;
+ 
+-	dev_warn(dev, "MIPI CSI2 CSR and HC register dump, mipi csi%d\n", csi2dev->id);
++	dev_dbg(dev, "MIPI CSI2 CSR and HC register dump, mipi csi%d\n", csi2dev->id);
+ 	for (i = 0; i < ARRAY_SIZE(registers); i++) {
+ 		u32 reg = readl(csi2dev->base_regs + registers[i].offset);
+-		dev_warn(dev, "%20s[0x%.3x]: 0x%.3x\n",
++		dev_dbg(dev, "%20s[0x%.3x]: 0x%.3x\n",
+ 			registers[i].name, registers[i].offset, reg);
+ 	}
+ }
+@@ -661,9 +660,6 @@ static int mxc_csi2_get_sensor_fmt(struct mxc_mipi_csi2_dev *csi2dev)
+ 	/* Update input frame size and formate  */
+ 	memcpy(mf, &src_fmt.format, sizeof(struct v4l2_mbus_framefmt));
+ 
+-	dev_warn(&csi2dev->pdev->dev, "width=%d, height=%d, fmt.code=0x%x\n",
+-		mf->width, mf->height, mf->code);
+-
+ 	/* Get rxhs settle */
+ 	if (src_fmt.format.reserved[0] != 0) {
+ 		csi2dev->hs_settle =
+-- 
+2.25.1
+

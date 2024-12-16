@@ -1,0 +1,121 @@
+From 6ef8cf8294ef37186cc5d97a9311e519c27d14e0 Mon Sep 17 00:00:00 2001
+From: Clif Liu <clif.liu@lumotive.com>
+Date: Thu, 14 Dec 2023 16:04:19 -0700
+Subject: [PATCH 3/3] Get the 1PPS from FEC1
+
+---
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts | 24 +++++++++++---------
+ drivers/net/ethernet/freescale/fec_ptp.c     |  8 ++++++-
+ 2 files changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+index f50519954a86..b522b756e13f 100755
+--- a/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qm-mek.dts
+@@ -415,15 +415,15 @@ rsc_table1: rsc_table1@901ff000 {
+ 		};
+ 	};
+ 
++
+ 	pps {
+-        pinctrl-names = "default";
+-        pinctrl-0 = <&pinctrl_pps>;
+-        gpios = <&lsio_gpio1 18 GPIO_ACTIVE_HIGH>;
+-        assert-rising-edge;
+-	    compatible = "pps-gpio";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pps>;
++		gpios = <&lsio_gpio6 14 GPIO_ACTIVE_HIGH>;
++		assert-rising-edge;
++		compatible = "pps-gpio";
+ 		status = "okay";
+ 	};
+-
+ };
+ 
+ &adc0 {
+@@ -1410,7 +1410,7 @@ IMX8QM_SPI3_SCK_LSIO_GPIO2_IO17				0x00000041	// RX_24V_EN
+ 			IMX8QM_SPI3_SDO_LSIO_GPIO2_IO18				0x00000041	// RX_18V_EN
+ 			IMX8QM_SPI3_SDI_LSIO_GPIO2_IO19				0x00000041	// RX_3.3V_EN
+ 			IMX8QM_SPI3_CS0_LSIO_GPIO2_IO20				0x00000041	// LASER_PWR_DN
+-//			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
++			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
+ 			IMX8QM_MIPI_DSI0_GPIO0_01_LSIO_GPIO1_IO19		0x00000041	// SELECT_I2C_GPIO
+ 			IMX8QM_USDHC2_CLK_LSIO_GPIO5_IO24			0x00000041	// ERROR_GPIO0
+ 			IMX8QM_USDHC2_CMD_LSIO_GPIO5_IO25			0x00000041	// INTERRUPT_GPIO1
+@@ -1419,8 +1419,8 @@ IMX8QM_USDHC2_DATA1_LSIO_GPIO5_IO27			0x00000041	// RX_GPIO3
+ 			IMX8QM_USDHC2_DATA2_LSIO_GPIO5_IO28			0x00000041	// RX_GPIO4
+ 			IMX8QM_USDHC2_DATA3_LSIO_GPIO5_IO29			0x00000041	// RX_GPIO5
+ 			IMX8QM_SPDIF0_TX_LSIO_GPIO2_IO15			0x00000041	// PGOOD_5.0
+-			IMX8QM_ENET0_REFCLK_125M_25M_LSIO_GPIO4_IO15	0x00000041	// ENET0_REFCLK
+ /*
++			IMX8QM_ENET0_REFCLK_125M_25M_LSIO_GPIO4_IO15		0x00000041	// ENET0_REFCLK
+ 			IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0x0600004c
+ 			IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x0600004c
+ 			IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x0600004c
+@@ -1513,7 +1513,10 @@ IMX8QM_ENET0_RGMII_RXD0_CONN_ENET0_RGMII_RXD0		0x06000020
+ 			IMX8QM_ENET0_RGMII_RXD1_CONN_ENET0_RGMII_RXD1		0x06000020
+ 			IMX8QM_ENET0_RGMII_RXD2_CONN_ENET0_RGMII_RXD2		0x06000020
+ 			IMX8QM_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3		0x06000020
+-/*            IMX8QM_ENET0_REFCLK_125M_25M_CONN_ENET0_PPS     0x06000020 */
++			IMX8QM_ENET0_REFCLK_125M_25M_CONN_ENET0_PPS		0x06000060
++/*
++			IMX8QM_ENET0_REFCLK_125M_25M_CONN_ENET0_REFCLK_125M_25M	0x06000020
++*/
+ 		>;
+ 	};
+ 
+@@ -1862,11 +1865,10 @@ IMX8QM_MIPI_DSI1_GPIO0_01_LSIO_GPIO1_IO23         0x00000020
+ 
+ 	pinctrl_pps: pps1 {
+ 		fsl,pins = <
+-			IMX8QM_MIPI_DSI0_GPIO0_00_LSIO_GPIO1_IO18		0x00000041	// T_SYNC_BUF
++			IMX8QM_ENET1_RGMII_TXD2_LSIO_GPIO6_IO14		  0x06000041	// PPS_IN_BUF
+ 		>;
+ 	};
+ 
+-
+ };
+ 
+ &thermal_zones {
+diff --git a/drivers/net/ethernet/freescale/fec_ptp.c b/drivers/net/ethernet/freescale/fec_ptp.c
+index d71eac7e1924..b360bc800cd9 100644
+--- a/drivers/net/ethernet/freescale/fec_ptp.c
++++ b/drivers/net/ethernet/freescale/fec_ptp.c
+@@ -66,6 +66,8 @@
+ #define FEC_T_TIE_OFFSET		6
+ #define FEC_T_TF_MASK			0x00000080
+ #define FEC_T_TF_OFFSET			7
++#define FEC_T_TPWC_MASK                 0x0000F800
++#define FEC_T_TPWC_OFFSET		11
+ 
+ #define FEC_ATIME_CTRL		0x400
+ #define FEC_ATIME		0x404
+@@ -81,12 +83,14 @@
+ #define MAX_TIMER_CHANNEL	3
+ #define FEC_TMODE_TOGGLE	0x05
+ #define FEC_HIGH_PULSE		0x0F
++#define FEC_MAX_PW              0x1F
+ 
+ #define FEC_CC_MULT	(1 << 31)
+ #define FEC_COUNTER_PERIOD	(1 << 31)
+ #define PPS_OUPUT_RELOAD_PERIOD	NSEC_PER_SEC
+ #define FEC_CHANNLE_0		0
+-#define DEFAULT_PPS_CHANNEL	FEC_CHANNLE_0
++#define FEC_CHANNEL_1		1
++#define DEFAULT_PPS_CHANNEL	FEC_CHANNEL_1
+ 
+ /**
+  * fec_ptp_enable_pps
+@@ -186,6 +190,8 @@ static int fec_ptp_enable_pps(struct fec_enet_private *fep, uint enable)
+ 		val &= ~(1 << FEC_T_TDRE_OFFSET);
+ 		val &= ~(FEC_T_TMODE_MASK);
+ 		val |= (FEC_HIGH_PULSE << FEC_T_TMODE_OFFSET);
++		val &= ~(FEC_T_TPWC_MASK);
++		val |= (FEC_MAX_PW << FEC_T_TPWC_OFFSET);
+ 		writel(val, fep->hwp + FEC_TCSR(fep->pps_channel));
+ 
+ 		/* Write the second compare event timestamp and calculate
+-- 
+2.25.1
+
